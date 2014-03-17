@@ -1,4 +1,4 @@
 geotools
 ========
 
-Dependency-free Haxe geo tools
+Dependency-free, straight-to-the-point Haxe geo tools.

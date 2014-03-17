@@ -1,0 +1,4 @@
+-cp tests
+-main TestAll
+-lib utest
+--interp
