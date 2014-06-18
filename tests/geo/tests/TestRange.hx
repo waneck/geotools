@@ -12,7 +12,7 @@ class TestRange
 
   public function test_range()
   {
-    var pos = [for (i in 0...5) new Loc(2 - i, i - 2)];
+    var pos = [for (i in 0...5) new Location(2 - i, i - 2)];
 
     //all possible outcomes
     var indices = [

@@ -21,7 +21,7 @@ class Range
   /**
     Creates a new Range object with a new contraint
   **/
-  public function constrain(pos:Loc):Range
+  public function constrain(pos:Location):Range
   {
     var changed = false;
     var minLat = minLat,
@@ -56,17 +56,17 @@ class Range
       return this;
   }
 
-  public function contains(pos:Loc):Bool
+  public function contains(pos:Location):Bool
   {
     var lat = pos.lat, lon = pos.lon;
     return lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon;
   }
 
-  public function mid():Loc
+  public function mid():Location
   {
     if (!Math.isFinite(minLat) && !Math.isFinite(minLon) && !Math.isFinite(maxLat) && !Math.isFinite(maxLon))
-      return new Loc(0,0);
-    return new Loc((minLat + maxLat) / 2, (minLon + maxLon) / 2);
+      return new Location(0,0);
+    return new Location((minLat + maxLat) / 2, (minLon + maxLon) / 2);
   }
 
   public function toString()

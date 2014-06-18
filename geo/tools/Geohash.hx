@@ -17,7 +17,7 @@ abstract Geohash(String) to String
 		this = s;
 	}
 
-	public static function geohash(pos:Loc, numberOfChars=9):Geohash
+	public static function geohash(pos:Location, numberOfChars=9):Geohash
 	{
 		var chars = [], bits = 0,
 				hash_value = 0;
@@ -61,7 +61,7 @@ abstract Geohash(String) to String
 		return new Geohash(chars.join(''));
 	}
 
-	@:extern inline public static function fromPos(pos:Loc)
+	@:extern inline public static function fromPos(pos:Location)
 	{
 		return geohash(pos);
 	}
@@ -104,13 +104,13 @@ abstract Geohash(String) to String
 		return new Range(minlat,maxlat, minlon,maxlon);
 	}
 
-	public function neighbor(direction:Loc):Geohash
+	public function neighbor(direction:Location):Geohash
 	{
 		var range = toRange(),
 				lonlat = range.mid();
 		var nlat = lonlat.lat + (range.maxLat - lonlat.lat) * direction.lat * 2,
 				nlon = lonlat.lon + (range.maxLon - lonlat.lon) * direction.lon * 2;
-		return geohash( new Loc(nlat,nlon), this.length );
+		return geohash( new Location(nlat,nlon), this.length );
 	}
 
 	@:extern inline public static function eachBoxIn(range:Range, numberOfChars=9, doFn:Geohash->Void):Void
@@ -119,8 +119,8 @@ abstract Geohash(String) to String
 				maxLat = range.maxLat,
 				minLon = range.minLon,
 				maxLon = range.maxLon;
-		var hashSouthWest = geohash(new Loc(minLat, minLon), numberOfChars);
-		var hashNorthEast = geohash(new Loc(maxLat, maxLon), numberOfChars);
+		var hashSouthWest = geohash(new Location(minLat, minLon), numberOfChars);
+		var hashNorthEast = geohash(new Location(maxLat, maxLon), numberOfChars);
 
 		var range = hashSouthWest.toRange(),
 				latlon = range.mid();
@@ -136,7 +136,7 @@ abstract Geohash(String) to String
 
 		for (lat in 0...(latStep + 1))
 			for (lon in 0...(lonStep + 1))
-				doFn( hashSouthWest.neighbor(new Loc(lat,lon)) );
+				doFn( hashSouthWest.neighbor(new Location(lat,lon)) );
 	}
 
 	public static function fromRange(range:Range, numberOfChars=9):Array<Geohash>

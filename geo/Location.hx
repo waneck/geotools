@@ -4,7 +4,7 @@ import geo.Units;
 /**
   A simple position defined by (lat,lon)
 **/
-class Loc
+class Location
 {
 	public var lat(default, null):Float;
 	public var lon(default, null):Float;
@@ -18,7 +18,7 @@ class Loc
 	static inline var R = 6371 * 1000;
   static inline var toRad = 0.017453292519943295;
 
-	public function dist(to:Loc):Meters
+	public function dist(to:Location):Meters
 	{
 		var lat1 = lat, lat2 = to.lat;
 		var lon1 = lon, lon2 = to.lon;
