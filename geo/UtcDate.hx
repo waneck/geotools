@@ -41,7 +41,7 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 	private static var year_months = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEB, DAYS_IN_MAR, DAYS_IN_APR, DAYS_IN_MAY, DAYS_IN_JUN, DAYS_IN_JUL, DAYS_IN_AUG, DAYS_IN_SEP, DAYS_IN_OCT, DAYS_IN_NOV, DAYS_IN_DEC ]);
 	private static var year_months_leap = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEBL, DAYS_IN_MARL, DAYS_IN_APRL, DAYS_IN_MAYL, DAYS_IN_JUNL, DAYS_IN_JULL, DAYS_IN_AUGL, DAYS_IN_SEPL, DAYS_IN_OCTL, DAYS_IN_NOVL, DAYS_IN_DECL ]);
 
-	private function getMonth():Month
+	public function getMonth():Month
 	{
 		var days = this.float() / (60 * 60 * 24),
 				year = year_months;
@@ -66,12 +66,12 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 		if (days <= DAYS_IN_JUL)
 		{
 			for (i in 1...7)
-				if (days <= year[i])
-					return i - 1;
+				if (days < year[i])
+					return i;
 		} else {
 			for (i in 7...12)
-				if (days <= year[i])
-					return i - 1;
+				if (days < year[i])
+					return i;
 		}
 		return throw "assert";
 	}
@@ -105,7 +105,6 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 				year += y * 4 + 2;
 
 				// rem is the remaining days we have. the month will depend if we're on a leap year
-				trace(year,rem);
 				if (rem > 366)
 				{
 					// past leap year
