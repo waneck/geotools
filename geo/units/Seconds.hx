@@ -7,6 +7,11 @@ abstract Seconds(Float) from Float
 		this = f;
 	}
 
+	inline public static function fromTime(hours:Int = 0, minutes:Int = 0, secs:Int = 0):Seconds
+	{
+		return hours * 60 * 60 + minutes * 60 + secs;
+	}
+
 	@:extern @:op(A+B) public static function add(lhs:Seconds, offset:Seconds):Seconds;
 	@:extern @:op(A-B) public static function sub(lhs:Seconds, offset:Seconds):Seconds;
   @:extern @:op(A>B) public static function gt(lhs:Seconds, rhs:Seconds):Bool;

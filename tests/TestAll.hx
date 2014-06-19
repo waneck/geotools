@@ -11,6 +11,7 @@ class TestAll
 
 		runner.addCase(new TestRange());
 		runner.addCase(new TestGeohash());
+		runner.addCase(new TestDate());
 
 		Report.create(runner);
 		runner.run();
