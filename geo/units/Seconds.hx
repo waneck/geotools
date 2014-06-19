@@ -9,7 +9,11 @@ abstract Seconds(Float) from Float
 
 	@:extern @:op(A+B) public static function add(lhs:Seconds, offset:Seconds):Seconds;
 	@:extern @:op(A-B) public static function sub(lhs:Seconds, offset:Seconds):Seconds;
-  @:extern public function float() return this;
+  @:extern @:op(A>B) public static function gt(lhs:Seconds, rhs:Seconds):Bool;
+  @:extern @:op(A>=B) public static function gte(lhs:Seconds, rhs:Seconds):Bool;
+  @:extern @:op(A<B) public static function lt(lhs:Seconds, rhs:Seconds):Bool;
+  @:extern @:op(A<=B) public static function lte(lhs:Seconds, rhs:Seconds):Bool;
+  @:extern inline public function float() return this;
 
   @:from public static function fromDate(d:Date):Seconds
   {
