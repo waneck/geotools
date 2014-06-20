@@ -13,6 +13,11 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 		return this;
 	}
 
+	public static function now():UtcDate
+	{
+		return new UtcDate( Date.now().getTime() / 1000 );
+	}
+
 	private static inline var DAYS_IN_FOUR_YEARS = 366 + 365 + 365 + 365;
 	private static inline var DAYS_IN_JAN = 31;
 	private static inline var DAYS_IN_FEB = DAYS_IN_JAN + 28;
@@ -45,12 +50,12 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 	{
 		var days = this.float() / (60 * 60 * 24),
 				year = year_months;
-		if (days > (365 + 365))
+		if (days <= (365 + 365))
 		{
 			days = days % 365;
 		} else {
-			var y = Std.int(days / DAYS_IN_FOUR_YEARS),
-					rem = days % DAYS_IN_FOUR_YEARS;
+			days -= 365 + 365;
+			var rem = days % DAYS_IN_FOUR_YEARS;
 			if (rem <= 366)
 			{
 				year = year_months_leap;
@@ -60,12 +65,10 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 			}
 		}
 
-		var days = Std.int(days);
-
 		//search for the month
 		if (days <= DAYS_IN_JUL)
 		{
-			for (i in 1...7)
+			for (i in 0...7)
 				if (days < year[i])
 					return i;
 		} else {
