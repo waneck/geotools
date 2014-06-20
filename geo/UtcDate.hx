@@ -15,7 +15,12 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 
 	public static function now():UtcDate
 	{
-		return new UtcDate( Date.now().getTime() / 1000 );
+		return Date.now();
+	}
+
+	@:from inline public static function fromDate(d:Date):UtcDate
+	{
+		return new UtcDate( d.getTime() / 1000 );
 	}
 
 	public function getMonth():Month
