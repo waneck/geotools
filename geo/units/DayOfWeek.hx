@@ -12,7 +12,7 @@ package geo.units;
 
 	public function toString()
 	{
-		switch (this)
+		return switch (this)
 		{
 			case 0: "Sunday";
 			case 1: "Monday";
@@ -21,6 +21,7 @@ package geo.units;
 			case 4: "Thursday";
 			case 5: "Friday";
 			case 6: "Saturday";
+			case _: throw 'NOTDAY($this)';
 		}
 	}
 

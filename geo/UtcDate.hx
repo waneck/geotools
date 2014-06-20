@@ -18,34 +18,6 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 		return new UtcDate( Date.now().getTime() / 1000 );
 	}
 
-	private static inline var DAYS_IN_FOUR_YEARS = 366 + 365 + 365 + 365;
-	private static inline var DAYS_IN_JAN = 31;
-	private static inline var DAYS_IN_FEB = DAYS_IN_JAN + 28;
-	private static inline var DAYS_IN_FEBL = DAYS_IN_JAN + 29;
-	private static inline var DAYS_IN_MAR = DAYS_IN_FEB + 31;
-	private static inline var DAYS_IN_MARL = DAYS_IN_FEBL + 31;
-	private static inline var DAYS_IN_APR = DAYS_IN_MAR + 30;
-	private static inline var DAYS_IN_APRL = DAYS_IN_MARL + 30;
-	private static inline var DAYS_IN_MAY = DAYS_IN_APR + 31;
-	private static inline var DAYS_IN_MAYL = DAYS_IN_APRL + 31;
-	private static inline var DAYS_IN_JUN = DAYS_IN_MAY + 30;
-	private static inline var DAYS_IN_JUNL = DAYS_IN_MAYL + 30;
-	private static inline var DAYS_IN_JUL = DAYS_IN_JUN + 31;
-	private static inline var DAYS_IN_JULL = DAYS_IN_JUNL + 31;
-	private static inline var DAYS_IN_AUG = DAYS_IN_JUL + 31;
-	private static inline var DAYS_IN_AUGL = DAYS_IN_JULL + 31;
-	private static inline var DAYS_IN_SEP = DAYS_IN_AUG + 30;
-	private static inline var DAYS_IN_SEPL = DAYS_IN_AUGL + 30;
-	private static inline var DAYS_IN_OCT = DAYS_IN_SEP + 31;
-	private static inline var DAYS_IN_OCTL = DAYS_IN_SEPL + 31;
-	private static inline var DAYS_IN_NOV = DAYS_IN_OCT + 30;
-	private static inline var DAYS_IN_NOVL = DAYS_IN_OCTL + 30;
-	private static inline var DAYS_IN_DEC = DAYS_IN_NOV + 31;
-	private static inline var DAYS_IN_DECL = DAYS_IN_NOVL + 31;
-
-	private static var year_months = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEB, DAYS_IN_MAR, DAYS_IN_APR, DAYS_IN_MAY, DAYS_IN_JUN, DAYS_IN_JUL, DAYS_IN_AUG, DAYS_IN_SEP, DAYS_IN_OCT, DAYS_IN_NOV, DAYS_IN_DEC ]);
-	private static var year_months_leap = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEBL, DAYS_IN_MARL, DAYS_IN_APRL, DAYS_IN_MAYL, DAYS_IN_JUNL, DAYS_IN_JULL, DAYS_IN_AUGL, DAYS_IN_SEPL, DAYS_IN_OCTL, DAYS_IN_NOVL, DAYS_IN_DECL ]);
-
 	public function getMonth():Month
 	{
 		var days = this.float() / (60 * 60 * 24),
@@ -77,6 +49,12 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 					return i;
 		}
 		return throw "assert";
+	}
+
+	public function getDayOfWeek():DayOfWeek
+	{
+		trace( this.float() / (60 * 60 * 24) );
+		return Std.int( (4 + (this.float() / (60 * 60 * 24))) % 7);
 	}
 
 	@:extern inline public function withParts(fn:Int->Month->Int->Int->Int->Seconds->Void):Void
@@ -163,5 +141,34 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 	{
 		return i < 10 ? '0' + Std.int(i) : '' + Std.int(i);
 	}
+
+	private static inline var DAYS_IN_FOUR_YEARS = 366 + 365 + 365 + 365;
+	private static inline var DAYS_IN_JAN = 31;
+	private static inline var DAYS_IN_FEB = DAYS_IN_JAN + 28;
+	private static inline var DAYS_IN_FEBL = DAYS_IN_JAN + 29;
+	private static inline var DAYS_IN_MAR = DAYS_IN_FEB + 31;
+	private static inline var DAYS_IN_MARL = DAYS_IN_FEBL + 31;
+	private static inline var DAYS_IN_APR = DAYS_IN_MAR + 30;
+	private static inline var DAYS_IN_APRL = DAYS_IN_MARL + 30;
+	private static inline var DAYS_IN_MAY = DAYS_IN_APR + 31;
+	private static inline var DAYS_IN_MAYL = DAYS_IN_APRL + 31;
+	private static inline var DAYS_IN_JUN = DAYS_IN_MAY + 30;
+	private static inline var DAYS_IN_JUNL = DAYS_IN_MAYL + 30;
+	private static inline var DAYS_IN_JUL = DAYS_IN_JUN + 31;
+	private static inline var DAYS_IN_JULL = DAYS_IN_JUNL + 31;
+	private static inline var DAYS_IN_AUG = DAYS_IN_JUL + 31;
+	private static inline var DAYS_IN_AUGL = DAYS_IN_JULL + 31;
+	private static inline var DAYS_IN_SEP = DAYS_IN_AUG + 30;
+	private static inline var DAYS_IN_SEPL = DAYS_IN_AUGL + 30;
+	private static inline var DAYS_IN_OCT = DAYS_IN_SEP + 31;
+	private static inline var DAYS_IN_OCTL = DAYS_IN_SEPL + 31;
+	private static inline var DAYS_IN_NOV = DAYS_IN_OCT + 30;
+	private static inline var DAYS_IN_NOVL = DAYS_IN_OCTL + 30;
+	private static inline var DAYS_IN_DEC = DAYS_IN_NOV + 31;
+	private static inline var DAYS_IN_DECL = DAYS_IN_NOVL + 31;
+
+	private static var year_months = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEB, DAYS_IN_MAR, DAYS_IN_APR, DAYS_IN_MAY, DAYS_IN_JUN, DAYS_IN_JUL, DAYS_IN_AUG, DAYS_IN_SEP, DAYS_IN_OCT, DAYS_IN_NOV, DAYS_IN_DEC ]);
+	private static var year_months_leap = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEBL, DAYS_IN_MARL, DAYS_IN_APRL, DAYS_IN_MAYL, DAYS_IN_JUNL, DAYS_IN_JULL, DAYS_IN_AUGL, DAYS_IN_SEPL, DAYS_IN_OCTL, DAYS_IN_NOVL, DAYS_IN_DECL ]);
+
 }
 

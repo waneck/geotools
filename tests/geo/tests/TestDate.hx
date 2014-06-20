@@ -25,6 +25,8 @@ class TestDate
 		Assert.equals('2014-03-01T00:00:00Z', new UtcDate(1393632000).toString());
 		Assert.equals('2014-03-01T00:00:01Z', new UtcDate(1393632001).toString());
 		Assert.equals('2014-02-28T23:59:59Z', new UtcDate(1393631999).toString());
+		Assert.equals('2014-07-28T00:00:00Z', new UtcDate(1406505600).toString());
+		Assert.equals('1972-07-28T00:00:00Z', new UtcDate(81129600).toString());
 	}
 
 	public function test_month()
@@ -42,5 +44,22 @@ class TestDate
 		Assert.equals(Month.Mar, new UtcDate(1393632000).getMonth());
 		Assert.equals(Month.Mar, new UtcDate(1393632001).getMonth());
 		Assert.equals(Month.Feb, new UtcDate(1393631999).getMonth());
+		Assert.equals(Month.Jul, new UtcDate(1406505600).getMonth());
+		Assert.equals(Month.Jul, new UtcDate(81129600).getMonth());
+	}
+
+	public function test_day()
+	{
+		Assert.equals(DayOfWeek.Thursday, new UtcDate(0).getDayOfWeek());
+		Assert.equals(DayOfWeek.Friday, new UtcDate(86400).getDayOfWeek());
+		Assert.equals(DayOfWeek.Friday, new UtcDate(104400).getDayOfWeek());
+		Assert.equals(DayOfWeek.Saturday, new UtcDate(190800).getDayOfWeek());
+		Assert.equals(DayOfWeek.Sunday, new UtcDate(277200).getDayOfWeek());
+		Assert.equals(DayOfWeek.Monday, new UtcDate(363600).getDayOfWeek());
+		Assert.equals(DayOfWeek.Tuesday, new UtcDate(450000).getDayOfWeek());
+		Assert.equals(DayOfWeek.Wednesday, new UtcDate(536400).getDayOfWeek());
+		Assert.equals(DayOfWeek.Thursday, new UtcDate(622800).getDayOfWeek());
+		Assert.equals(DayOfWeek.Friday, new UtcDate(709200).getDayOfWeek());
+		Assert.equals(DayOfWeek.Thursday, new UtcDate(1403208368).getDayOfWeek());
 	}
 }
