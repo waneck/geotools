@@ -51,9 +51,74 @@ abstract UtcDate(Seconds /* secs since 1970 */)
 		return throw "assert";
 	}
 
+	inline public function getSeconds():Seconds
+	{
+		return Std.int(this.float() % 60);
+	}
+
+	inline public function getMinutes():Int
+	{
+		return Std.int( (this.float() / 60) % 60 );
+	}
+
+	inline public function getHours():Int
+	{
+		return Std.int( (this.float() / 60 * 60 ) % 24 );
+	}
+
+	public function getDate():Int
+	{
+		var days = this.float() / (60 * 60 * 24);
+		if (days <= (365 + 365))
+		{
+			days = days % 365;
+		} else {
+			days -= 365 + 365;
+			var rem = days % DAYS_IN_FOUR_YEARS;
+			if (rem <= 366)
+			{
+				days = rem;
+			} else {
+				days = (rem - 366) % 365;
+			}
+		}
+		return Std.int(days);
+	}
+
+	public function getYear():Int
+	{
+		var days = this.float() / (60 * 60 * 24);
+		var year = 1970;
+
+		//check if we are in between 1970-1972 (1972 was a leap year)
+		if (days < 0)
+		{
+			//someday we'll tackle this
+			throw "Timestamp cannot be negative";
+		} else {
+			if (days <= 365 + 365)
+			{
+				year += Std.int( days / 365 );
+			} else {
+				days -= 365 + 365;
+				var y = Std.int(days / DAYS_IN_FOUR_YEARS),
+						rem = days % DAYS_IN_FOUR_YEARS;
+				year += y * 4 + 2;
+
+				// rem is the remaining days we have. the month will depend if we're on a leap year
+				if (rem > 366)
+				{
+					// past leap year
+					rem -= 366;
+					year += 1 + Std.int(rem / 365);
+				}
+			}
+		}
+		return year;
+	}
+
 	public function getDayOfWeek():DayOfWeek
 	{
-		trace( this.float() / (60 * 60 * 24) );
 		return Std.int( (4 + (this.float() / (60 * 60 * 24))) % 7);
 	}
 

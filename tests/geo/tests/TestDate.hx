@@ -48,6 +48,25 @@ class TestDate
 		Assert.equals(Month.Jul, new UtcDate(81129600).getMonth());
 	}
 
+	public function test_year()
+	{
+		var stamp = new UtcDate(1403208368);
+		Assert.equals(2014, stamp.getYear());
+		Assert.equals(2000, new UtcDate(961372800).getYear());
+		Assert.equals(2000, new UtcDate(946684800).getYear());
+		Assert.equals(1970, new UtcDate(0).getYear());
+		Assert.equals(1972, new UtcDate(63072000).getYear());
+
+		//leap years
+		Assert.equals(1972, new UtcDate(68169600).getYear());
+		Assert.equals(2000, new UtcDate(951782400).getYear());
+		Assert.equals(2014, new UtcDate(1393632000).getYear());
+		Assert.equals(2014, new UtcDate(1393632001).getYear());
+		Assert.equals(2014, new UtcDate(1393631999).getYear());
+		Assert.equals(2014, new UtcDate(1406505600).getYear());
+		Assert.equals(1972, new UtcDate(81129600).getYear());
+	}
+
 	public function test_day()
 	{
 		Assert.equals(DayOfWeek.Thursday, new UtcDate(0).getDayOfWeek());
