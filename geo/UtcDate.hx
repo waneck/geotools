@@ -91,12 +91,12 @@ import geo.Units;
 		return Std.int(this.float() % 60);
 	}
 
-	inline public function getMinutes():Int
+	inline public function getMinutes():Minutes
 	{
 		return Std.int( (this.float() / 60) % 60 );
 	}
 
-	inline public function getHours():Int
+	inline public function getHours():Hours
 	{
 		return Std.int( (this.float() / 60 * 60 ) % 24 );
 	}
@@ -286,6 +286,36 @@ import geo.Units;
 
 	private static var year_months = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEB, DAYS_IN_MAR, DAYS_IN_APR, DAYS_IN_MAY, DAYS_IN_JUN, DAYS_IN_JUL, DAYS_IN_AUG, DAYS_IN_SEP, DAYS_IN_OCT, DAYS_IN_NOV, DAYS_IN_DEC ]);
 	private static var year_months_leap = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEBL, DAYS_IN_MARL, DAYS_IN_APRL, DAYS_IN_MAYL, DAYS_IN_JUNL, DAYS_IN_JULL, DAYS_IN_AUGL, DAYS_IN_SEPL, DAYS_IN_OCTL, DAYS_IN_NOVL, DAYS_IN_DECL ]);
+
+	@:commutative @:extern @:op(A+B) inline public static function adds(lhs:UtcDate, offset:Seconds):UtcDate
+	{
+		return new UtcDate(lhs.getTime() + offset);
+	}
+
+	@:commutative @:extern @:op(A-B) inline public static function subs(lhs:UtcDate, offset:Seconds):UtcDate
+	{
+		return new UtcDate(lhs.getTime() + offset);
+	}
+
+	@:commutative @:extern @:op(A+B) inline public static function addm(lhs:UtcDate, offset:Minutes):UtcDate
+	{
+		return new UtcDate(lhs.getTime() + offset);
+	}
+
+	@:commutative @:extern @:op(A-B) inline public static function subm(lhs:UtcDate, offset:Minutes):UtcDate
+	{
+		return new UtcDate(lhs.getTime() + offset);
+	}
+
+	@:commutative @:extern @:op(A+B) inline public static function addh(lhs:UtcDate, offset:Hours):UtcDate
+	{
+		return new UtcDate(lhs.getTime() + offset);
+	}
+
+	@:commutative @:extern @:op(A-B) inline public static function subh(lhs:UtcDate, offset:Hours):UtcDate
+	{
+		return new UtcDate(lhs.getTime() + offset);
+	}
 
 }
 

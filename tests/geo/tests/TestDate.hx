@@ -102,7 +102,17 @@ class TestDate
 		Assert.equals(30, date.getDate());
 	}
 
+	public function test_ops()
+	{
+		var date = new UtcDate(1403377154);
+		Assert.equals('2014-06-21T18:59:14Z', date.toString());
+		Assert.equals('2014-06-21T18:59:15Z', (date + Seconds.One).toString());
+		Assert.equals('2014-06-21T19:00:14Z', (date + Minutes.One).toString());
+		Assert.equals('2014-06-21T19:59:14Z', (date + Hours.One).toString());
+	}
+
 	public function test_parse()
 	{
+		Assert.isTrue(true);
 	}
 }

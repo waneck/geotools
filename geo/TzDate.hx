@@ -298,6 +298,36 @@ using StringTools;
 
 		return new TzDate(new UtcDate(stamp), stdTimezone);
 	}
+
+	@:commutative @:extern @:op(A+B) inline public static function adds(lhs:TzDate, offset:Seconds):TzDate
+	{
+		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+	}
+
+	@:commutative @:extern @:op(A-B) inline public static function subs(lhs:TzDate, offset:Seconds):TzDate
+	{
+		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+	}
+
+	@:commutative @:extern @:op(A+B) inline public static function addm(lhs:TzDate, offset:Minutes):TzDate
+	{
+		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+	}
+
+	@:commutative @:extern @:op(A-B) inline public static function subm(lhs:TzDate, offset:Minutes):TzDate
+	{
+		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+	}
+
+	@:commutative @:extern @:op(A+B) inline public static function addh(lhs:TzDate, offset:Hours):TzDate
+	{
+		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+	}
+
+	@:commutative @:extern @:op(A-B) inline public static function subh(lhs:TzDate, offset:Hours):TzDate
+	{
+		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+	}
 }
 
 @:dce class DateData

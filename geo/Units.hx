@@ -4,5 +4,7 @@ package geo;
 
 typedef Meters = geo.units.Meters;
 typedef Seconds = geo.units.Seconds;
+typedef Minutes = geo.units.Minutes;
+typedef Hours = geo.units.Hours;
 typedef Month = geo.units.Month;
 typedef DayOfWeek = geo.units.DayOfWeek;

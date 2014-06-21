@@ -10,9 +10,9 @@ abstract Seconds(Float) from Float
 		this = f;
 	}
 
-	@:extern inline public static function fromTime(hours:Int = 0, minutes:Int = 0, secs:Int = 0):Seconds
+	@:extern inline public static function fromTime(hours:Hours = 0, minutes:Minutes = 0, secs:Seconds = 0):Seconds
 	{
-		return hours * 60 * 60 + minutes * 60 + secs;
+		return hours + minutes.toSeconds() + secs;
 	}
 
 	@:extern @:op(-A) public static function neg(s:Seconds):Seconds;
