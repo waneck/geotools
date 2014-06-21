@@ -306,6 +306,11 @@ using StringTools;
 		return new TzDate(new UtcDate(stamp), stdTimezone);
 	}
 
+	@:extern inline public static function fromIso(str:String):TzDate
+	{
+		return fromFormat('%Y-%m-%dT%H:%M:%S%z', str, 0);
+	}
+
 	@:commutative @:extern @:op(A+B) inline public static function adds(lhs:TzDate, offset:Seconds):TzDate
 	{
 		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);

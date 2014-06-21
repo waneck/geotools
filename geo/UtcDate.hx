@@ -275,6 +275,14 @@ import geo.Units;
 		return new UtcDate(this.float() % (60 * 60 * 24));
 	}
 
+	/**
+		Drops the time portion of the UtcDate and keeps only the date
+	**/
+	public function dropTime():UtcDate
+	{
+		return new UtcDate(Math.floor(this.float() / (60*60*24)) * 60.0 * 60 * 24);
+	}
+
 	private static inline var DAYS_IN_FOUR_YEARS = 366 + 365 + 365 + 365;
 	private static inline var DAYS_IN_JAN = 31;
 	private static inline var DAYS_IN_FEB = DAYS_IN_JAN + 28;
@@ -331,6 +339,17 @@ import geo.Units;
 	@:commutative @:extern @:op(A-B) inline public static function subh(lhs:UtcDate, offset:Hours):UtcDate
 	{
 		return new UtcDate(lhs.getTime() + offset);
+	}
+
+	@:extern @:op(A>B) public static function gt(lhs:UtcDate, rhs:UtcDate):Bool;
+	@:extern @:op(A>=B) public static function gte(lhs:UtcDate, rhs:UtcDate):Bool;
+	@:extern @:op(A<B) public static function lt(lhs:UtcDate, rhs:UtcDate):Bool;
+	@:extern @:op(A<=B) public static function lte(lhs:UtcDate, rhs:UtcDate):Bool;
+	@:extern @:op(A==B) public static function eq(lhs:UtcDate, rhs:UtcDate):Bool;
+
+	inline public function between(minDateIncluded:UtcDate, maxDateIncluded:UtcDate):Bool
+	{
+		return this >= minDateIncluded.getTime() && this <= maxDateIncluded.getTime();
 	}
 
 }

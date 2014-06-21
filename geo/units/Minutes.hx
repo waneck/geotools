@@ -32,7 +32,7 @@ abstract Minutes(Float) from Float
 
 	@:extern @:to inline public function toSeconds():Seconds
 	{
-		return this * 60;
+		return this * 60.0;
 	}
 
 	@:extern inline public function toString()
