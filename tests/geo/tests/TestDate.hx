@@ -113,6 +113,8 @@ class TestDate
 
 	public function test_parse()
 	{
-		Assert.isTrue(true);
+		Assert.equals('2014-06-11T16:45:20-0300', TzDate.fromFormat('%F %T', '2014-06-11 16:45:20', new Hours(-3)).toString());
+		Assert.equals('2014-06-11T16:45:20-0300', TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2014-06-11 16:45:20', new Hours(-3)).toString());
+		Assert.equals('2014-06-11T15:45:20-0400', TzDate.fromFormat('%Y-%m-%d %H:%M:%S%z', '2014-06-11 15:45:20-0400', new Hours(-3)).toString());
 	}
 }

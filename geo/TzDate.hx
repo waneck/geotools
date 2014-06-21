@@ -94,8 +94,11 @@ using StringTools;
 					idx = oldIdx;
 					oldFormat = null;
 					continue;
+				} else {
+					break;
 				}
 			}
+			trace(totalIdx);
 			switch(form.fastCodeAt(idx++))
 			{
 				case '%'.code:
@@ -127,11 +130,13 @@ using StringTools;
 						case 'D'.code:
 							oldFormat = format;
 							oldIdx = idx;
+							idx = 0;
 							form = '%m/%d/%y';
 							continue;
 						case 'F'.code:
 							oldFormat = format;
 							oldIdx = idx;
+							idx = 0;
 							form = '%Y-%m-%d';
 							continue;
 						case 'H'.code:
@@ -177,6 +182,7 @@ using StringTools;
 						case 'r'.code:
 							oldFormat = format;
 							oldIdx = idx;
+							idx = 0;
 							form = '%I:%M:%S %p';
 							continue;
 						case 's'.code:
@@ -204,12 +210,13 @@ using StringTools;
 						case 'T'.code:
 							oldFormat = format;
 							oldIdx = idx;
+							idx = 0;
 							form = '%H:%M:%S';
 							continue;
 						case 'Y'.code:
 							var y = Std.parseInt(string.substr(totalIdx,4));
 							totalIdx += 4;
-							if (y == null || y >= 60 || y < 0) throw 'Invalid year: ${string.substr(totalIdx - 2,2)}';
+							if (y == null || y < 1970 || y < 0) throw 'Invalid year: ${string.substr(totalIdx - 4,4)}';
 							if (year != null && year != y) throw 'Two different years were parsed: $y and $year for string $string';
 							year = y;
 						case 'z'.code:
@@ -234,11 +241,11 @@ using StringTools;
 								stdTimezone = -stdTimezone;
 
 						case '%'.code:
-							if (string.fastCodeAt(totalIdx++) != '%'.code) throw 'Unexpected character ${string.charAt(totalIdx-1)}';
+							if (string.fastCodeAt(totalIdx++) != '%'.code) throw 'Unexpected character ${string.charAt(totalIdx-1)}. Expecting %';
 						case 'n'.code:
-							if (string.fastCodeAt(totalIdx++) != '\n'.code) throw 'Unexpected character ${string.charAt(totalIdx-1)}';
+							if (string.fastCodeAt(totalIdx++) != '\n'.code) throw 'Unexpected character ${string.charAt(totalIdx-1)}. Expecting \\n';
 						case 't'.code:
-							if (string.fastCodeAt(totalIdx++) != '\t'.code) throw 'Unexpected character ${string.charAt(totalIdx-1)}';
+							if (string.fastCodeAt(totalIdx++) != '\t'.code) throw 'Unexpected character ${string.charAt(totalIdx-1)}. Expecting \\t';
 						case 'a'.code | 'A'.code:
 							while (++totalIdx < string.length)
 							{
@@ -250,7 +257,7 @@ using StringTools;
 							throw 'Invalid %${String.fromCharCode(chr)}';
 						}
 				case chr:
-					if (string.fastCodeAt(totalIdx++) != chr) throw 'Unexpected character ${string.charAt(totalIdx-1)}';
+					if (string.fastCodeAt(totalIdx++) != chr) throw 'Unexpected character ${string.charAt(totalIdx-1)}. Expecting ${String.fromCharCode(chr)}';
 			}
 		}
 
@@ -265,7 +272,8 @@ using StringTools;
 				throw "Missing month";
 			if (day == null)
 				throw "Missing day";
-			stamp = UtcDate.fromDay(year, month, day).getTime().float();
+			trace(year,month,day);
+			stamp = UtcDate.fromDay(year, month - 1, day - 1).getTime().float();
 		}
 
 		if (hour != null)
@@ -296,6 +304,8 @@ using StringTools;
 		if (nano != null)
 			stamp += nano / 1000000000;
 
+		trace(stamp);
+		stamp -= stdTimezone.float();
 		return new TzDate(new UtcDate(stamp), stdTimezone);
 	}
 

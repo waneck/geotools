@@ -25,6 +25,7 @@ import geo.Units;
 
 	public static function fromDay(year:Int, month:Month, day:Int):UtcDate
 	{
+		var day:Float = day;
 		if (year < 1970)
 			throw 'Year must be after 1970';
 		if (day < 0 || day >= 31)
@@ -33,20 +34,29 @@ import geo.Units;
 		year -= 1970;
 		if (year <= 1)
 		{
-			day = day + year_months[ month.toInt() ] + year * 365;
+			if (month == Month.Jan)
+				day = day + year * 365;
+			else
+				day = day + year_months[ month.toInt() - 1 ] + year * 365;
 		} else {
 			year -= 2;
 			day += 365 + 365;
+			trace(year);
 			var d = Std.int(year / 4),
 					rem = Std.int(year % 4);
 			day += DAYS_IN_FOUR_YEARS * d;
+			trace(d);
 			if (rem == 0)
 			{
-				day += year_months_leap[ month.toInt() ];
+				if (month != Month.Jan)
+					day += year_months_leap[ month.toInt() - 1 ];
 			} else {
 				day += 366;
-				year--;
-				day += year_months[ month.toInt() ] + year * 365;
+				rem--;
+				if (month != Month.Jan)
+					day += year_months[ month.toInt() - 1 ] + rem * 365;
+				else
+					day += rem * 365;
 			}
 		}
 
