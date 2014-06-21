@@ -98,7 +98,6 @@ using StringTools;
 					break;
 				}
 			}
-			trace(totalIdx);
 			switch(form.fastCodeAt(idx++))
 			{
 				case '%'.code:
@@ -155,9 +154,9 @@ using StringTools;
 						case 'p'.code | 'P'.code:
 							switch (string.substr(totalIdx,2).toLowerCase())
 							{
-								case 'AM':
+								case 'am':
 									am = true;
-								case 'PM':
+								case 'pm':
 									am = false;
 								case ampm:
 									throw 'Invalid AM/PM marker: $ampm';
@@ -272,7 +271,6 @@ using StringTools;
 				throw "Missing month";
 			if (day == null)
 				throw "Missing day";
-			trace(year,month,day);
 			stamp = UtcDate.fromDay(year, month - 1, day - 1).getTime().float();
 		}
 
@@ -304,7 +302,6 @@ using StringTools;
 		if (nano != null)
 			stamp += nano / 1000000000;
 
-		trace(stamp);
 		stamp -= stdTimezone.float();
 		return new TzDate(new UtcDate(stamp), stdTimezone);
 	}

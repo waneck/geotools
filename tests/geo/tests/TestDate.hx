@@ -116,5 +116,14 @@ class TestDate
 		Assert.equals('2014-06-11T16:45:20-0300', TzDate.fromFormat('%F %T', '2014-06-11 16:45:20', new Hours(-3)).toString());
 		Assert.equals('2014-06-11T16:45:20-0300', TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2014-06-11 16:45:20', new Hours(-3)).toString());
 		Assert.equals('2014-06-11T15:45:20-0400', TzDate.fromFormat('%Y-%m-%d %H:%M:%S%z', '2014-06-11 15:45:20-0400', new Hours(-3)).toString());
+		Assert.equals( new Hours(10) + new Minutes(25), TzDate.fromFormat('%H:%M', '10:25', 0).date.getTime() );
+		Assert.equals( new Hours(10) + new Minutes(25), TzDate.fromFormat('%I:%M %p', '10:25 AM', 0).date.getTime() );
+		Assert.equals( new Hours(22) + new Minutes(25), TzDate.fromFormat('%I:%M %p', '10:25 PM', 0).date.getTime() );
+		Assert.equals( new Hours(18) + new Minutes(25), TzDate.fromFormat('%I:%M %p', '10:25 PM', new Hours(4)).date.getTime() );
+		Assert.equals( new Hours(18) + new Minutes(25), TzDate.fromFormat('x%I:%M %p', 'x10:25 PM', new Hours(4)).date.getTime() );
+		Assert.equals( new Hours(0) + new Minutes(25), TzDate.fromFormat('%I:%M %p', '12:25 AM', 0).date.getTime() );
+		Assert.equals( new Hours(12) + new Minutes(25), TzDate.fromFormat('%I:%M %p', '12:25 PM', 0).date.getTime() );
+		Assert.equals( '2014-06-30T18:59:14Z', TzDate.fromFormat('%ssome other text', '1404154754some other text', 0).toString() );
+		Assert.equals( '2014-06-30T18:59:14Z', TzDate.fromFormat('a%ssome other text', 'a1404154754some other text', new Hours(6)).date.toString() );
 	}
 }

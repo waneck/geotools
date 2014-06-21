@@ -41,11 +41,9 @@ import geo.Units;
 		} else {
 			year -= 2;
 			day += 365 + 365;
-			trace(year);
 			var d = Std.int(year / 4),
 					rem = Std.int(year % 4);
 			day += DAYS_IN_FOUR_YEARS * d;
-			trace(d);
 			if (rem == 0)
 			{
 				if (month != Month.Jan)
@@ -267,6 +265,14 @@ import geo.Units;
 	inline private static function str(i:Float)
 	{
 		return i < 10 ? '0' + Std.int(i) : '' + Std.int(i);
+	}
+
+	/**
+		Drops the Date portion of the UtcDate and keeps only the time
+	**/
+	public function dropDate():UtcDate
+	{
+		return new UtcDate(this.float() % (60 * 60 * 24));
 	}
 
 	private static inline var DAYS_IN_FOUR_YEARS = 366 + 365 + 365 + 365;
