@@ -8,6 +8,7 @@ class TestDate
 {
 	public function new()
 	{
+		trace( TzDate.now() );
 	}
 
 	public function test_toString()

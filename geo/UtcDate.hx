@@ -1,7 +1,7 @@
 package geo;
 import geo.Units;
 
-abstract UtcDate(Seconds /* secs since 1970 */)
+@:dce abstract UtcDate(Seconds /* secs since 1970 */)
 {
 	@:extern inline public function new(secs)
 	{
