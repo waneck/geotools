@@ -8,7 +8,6 @@ class TestDate
 {
 	public function new()
 	{
-		trace( TzDate.now() );
 	}
 
 	public function test_toString()
@@ -81,5 +80,29 @@ class TestDate
 		Assert.equals(DayOfWeek.Thursday, new UtcDate(622800).getDayOfWeek());
 		Assert.equals(DayOfWeek.Friday, new UtcDate(709200).getDayOfWeek());
 		Assert.equals(DayOfWeek.Thursday, new UtcDate(1403208368).getDayOfWeek());
+	}
+
+	public function test_tzdate()
+	{
+		var date = new TzDate( new UtcDate(1403377154), -3 * 60 * 60 );
+		Assert.equals(1403377154, date.getTime());
+		Assert.equals('2014-06-21T15:59:14-0300', date.toString());
+		Assert.equals('2014-06-21T18:59:14Z', date.date.toString());
+		var otherDay = new TzDate(date.date, 6 * 60 * 60);
+		Assert.equals('2014-06-22T00:59:14+0600', otherDay.toString());
+		Assert.equals(22, otherDay.getDate());
+		Assert.equals(21, date.getDate());
+
+		date = new TzDate( new UtcDate(1404154754), -3 * 60 * 60 );
+		otherDay = new TzDate( new UtcDate(1404154754), 6 * 60 * 60 );
+		Assert.equals('2014-06-30T15:59:14-0300', date.toString());
+		Assert.equals('2014-06-30T18:59:14Z', date.date.toString());
+		Assert.equals('2014-07-01T00:59:14+0600', otherDay.toString());
+		Assert.equals(01, otherDay.getDate());
+		Assert.equals(30, date.getDate());
+	}
+
+	public function test_parse()
+	{
 	}
 }

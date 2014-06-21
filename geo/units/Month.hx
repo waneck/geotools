@@ -19,19 +19,65 @@ package geo.units;
 	{
 		return switch (this)
 		{
-			case 0: "Jan";
-			case 1: "Feb";
-			case 2: "Mar";
-			case 3: "Apr";
+			case 0: "January";
+			case 1: "February";
+			case 2: "March";
+			case 3: "April";
 			case 4: "May";
-			case 5: "Jun";
-			case 6: "Jul";
-			case 7: "Aug";
-			case 8: "Sep";
-			case 9: "Oct";
-			case 10: "Nov";
-			case 11: "Dec";
+			case 5: "June";
+			case 6: "July";
+			case 7: "August";
+			case 8: "September";
+			case 9: "October";
+			case 10: "November";
+			case 11: "December";
 			case _: "INV_MONTH(" + this +")";
+		}
+	}
+
+	inline public static function fromInt(i:Int):Month
+	{
+		return (i <= 11) ? i : throw "Invalid month number " + i;
+	}
+
+	public static function fromString(str:String):Month
+	{
+		str = str.toLowerCase();
+		return if (str.length == 3)
+		{
+			switch (str)
+			{
+				case "jan": 0;
+				case "feb": 1;
+				case "mar": 2;
+				case "apr": 3;
+				case "may": 4;
+				case "jun": 5;
+				case "jul": 6;
+				case "aug": 7;
+				case "sep": 8;
+				case "oct": 9;
+				case "nov": 10;
+				case "dec": 11;
+				case _: throw "Invalid month from String: '" + str + "'";
+			}
+		} else {
+			switch (str)
+			{
+				case "january": 0;
+				case "february": 1;
+				case "march": 2;
+				case "april": 3;
+				case "may": 4;
+				case "june": 5;
+				case "july": 6;
+				case "august": 7;
+				case "september": 8;
+				case "october": 9;
+				case "november": 10;
+				case "december": 11;
+				case _: throw "Invalid month from String: '" + str + "'";
+			}
 		}
 	}
 

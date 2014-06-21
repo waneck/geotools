@@ -23,6 +23,36 @@ import geo.Units;
 		return new UtcDate( d.getTime() / 1000 );
 	}
 
+	public static function fromDay(year:Int, month:Month, day:Int):UtcDate
+	{
+		if (year < 1970)
+			throw 'Year must be after 1970';
+		if (day < 0 || day >= 31)
+			throw "Invalid day " + day;
+
+		year -= 1970;
+		if (year <= 1)
+		{
+			day = day + year_months[ month.toInt() ] + year * 365;
+		} else {
+			year -= 2;
+			day += 365 + 365;
+			var d = Std.int(year / 4),
+					rem = Std.int(year % 4);
+			day += DAYS_IN_FOUR_YEARS * d;
+			if (rem == 0)
+			{
+				day += year_months_leap[ month.toInt() ];
+			} else {
+				day += 366;
+				year--;
+				day += year_months[ month.toInt() ] + year * 365;
+			}
+		}
+
+		return new UtcDate( day * 24 * 60 * 60 );
+	}
+
 	public function getMonth():Month
 	{
 		var days = this.float() / (60 * 60 * 24),
@@ -73,7 +103,8 @@ import geo.Units;
 
 	public function getDate():Int
 	{
-		var days = this.float() / (60 * 60 * 24);
+		var days = this.float() / (60 * 60 * 24),
+				years = year_months;
 		if (days <= (365 + 365))
 		{
 			days = days % 365;
@@ -83,11 +114,22 @@ import geo.Units;
 			if (rem <= 366)
 			{
 				days = rem;
+				years = year_months_leap;
 			} else {
 				days = (rem - 366) % 365;
 			}
 		}
-		return Std.int(days);
+		var last = 0,
+				days = Std.int(days);
+		for (v in years)
+		{
+			if (v > days)
+			{
+				return days - last + 1;
+			}
+			last = v;
+		}
+		return throw "assert";
 	}
 
 	public function getYear():Int
@@ -127,7 +169,7 @@ import geo.Units;
 		return Std.int( (4 + (this.float() / (60 * 60 * 24))) % 7);
 	}
 
-	@:extern inline public function withParts(fn:Int->Month->Int->Int->Int->Seconds->Void):Void
+	@:extern inline public function inlineWithParts<T>(fn:Int->Month->Int->Int->Int->Seconds->T):T
 	{
 		var S = this.float(),
 				M = S / 60,
@@ -184,13 +226,18 @@ import geo.Units;
 		if (month < 0)
 			throw "assert: month is " + month + "; days is " + days + " for timestamp " + this;
 
-		fn(year,month,Std.int(days + 1), Std.int(H % 24), Std.int(M % 60), Std.int(S % 60));
+		return fn(year,month,Std.int(days + 1), Std.int(H % 24), Std.int(M % 60), Std.int(S % 60));
+	}
+
+	public function withParts<T>(fn):T
+	{
+		return inlineWithParts(fn);
 	}
 
 	@:to inline public function toString():String
 	{
-		var ret = new StringBuf();
-		withParts(function(year,month,day,hour,minute,sec) {
+		return withParts(function(year,month,day,hour,minute,sec) {
+			var ret = new StringBuf();
 			ret.add(year);
 			ret.add('-');
 			ret.add(str(month.toInt()+1));
@@ -203,8 +250,8 @@ import geo.Units;
 			ret.add(':');
 			ret.add(str(sec.float()));
 			ret.add('Z');
+			return ret.toString();
 		});
-		return ret.toString();
 	}
 
 	inline private static function str(i:Float)
