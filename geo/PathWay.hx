@@ -6,4 +6,9 @@ package geo;
 	{
 		this = path;
 	}
+
+	@:arrayAccess @:extern inline public function byIndex(idx:Int):Location
+	{
+		return this.get(idx);
+	}
 }

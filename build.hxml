@@ -2,3 +2,8 @@
 -main TestAll
 -lib utest
 --interp
+--next
+-cp tests
+-main TestAll
+-lib utest
+-js bin/js.js

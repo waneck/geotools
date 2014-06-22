@@ -242,7 +242,7 @@ import geo.Units;
 		return inlineWithParts(fn);
 	}
 
-	@:to inline public function toString():String
+	inline public function toString():String
 	{
 		return withParts(function(year,month,day,hour,minute,sec) {
 			var ret = new StringBuf();
@@ -341,11 +341,30 @@ import geo.Units;
 		return new UtcDate(lhs.getTime() + offset);
 	}
 
-	@:extern @:op(A>B) public static function gt(lhs:UtcDate, rhs:UtcDate):Bool;
-	@:extern @:op(A>=B) public static function gte(lhs:UtcDate, rhs:UtcDate):Bool;
-	@:extern @:op(A<B) public static function lt(lhs:UtcDate, rhs:UtcDate):Bool;
-	@:extern @:op(A<=B) public static function lte(lhs:UtcDate, rhs:UtcDate):Bool;
-	@:extern @:op(A==B) public static function eq(lhs:UtcDate, rhs:UtcDate):Bool;
+	@:extern @:op(A>B) inline public static function gt(lhs:UtcDate, rhs:UtcDate):Bool
+	{
+		return lhs.getTime().float() > rhs.getTime().float();
+	}
+
+	@:extern @:op(A>=B) inline public static function gte(lhs:UtcDate, rhs:UtcDate):Bool
+	{
+		return lhs.getTime().float() >= rhs.getTime().float();
+	}
+
+	@:extern @:op(A<B) inline public static function lt(lhs:UtcDate, rhs:UtcDate):Bool
+	{
+		return lhs.getTime().float() < rhs.getTime().float();
+	}
+
+	@:extern @:op(A<=B) inline public static function lte(lhs:UtcDate, rhs:UtcDate):Bool
+	{
+		return lhs.getTime().float() <= rhs.getTime().float();
+	}
+
+	@:extern @:op(A==B) inline public static function eq(lhs:UtcDate, rhs:UtcDate):Bool
+	{
+		return lhs.getTime().float() == rhs.getTime().float();
+	}
 
 	inline public function between(minDateIncluded:UtcDate, maxDateIncluded:UtcDate):Bool
 	{

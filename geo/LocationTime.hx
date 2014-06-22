@@ -18,4 +18,9 @@ class LocationTime extends Location
 	{
 		return new LocationTime(lat,lon,time);
 	}
+
+	override public function toString()
+	{
+		return '($lat,$lon @ $time)';
+	}
 }

@@ -14,7 +14,7 @@ import haxe.ds.Vector;
 		this.length = length < 0 ? data.length - start : length;
 	}
 
-	inline public function get(at:Int):Pos
+	@:arrayAccess inline public function get(at:Int):Pos
 	{
 		return data[start + at];
 	}
@@ -22,6 +22,11 @@ import haxe.ds.Vector;
 	inline public function expand():Path<Pos>
 	{
 		return new Path(data);
+	}
+
+	inline public function constrain(start:Int, length=-1):Path<Pos>
+	{
+		return new Path(data, start + this.start, length < 0 ? this.length - (start + this.start) : length);
 	}
 
 	inline public static function fromArray<Pos:Location>(arr:Array<Pos>, start:Int = 0, length = -1):Path<Pos>
@@ -38,7 +43,7 @@ import haxe.ds.Vector;
 	inline public function iter(fn:Pos->Void):Void
 	{
 		var data = data;
-		for (i in start..(start+length))
+		for (i in start...(start+length))
 		{
 			fn(data[i]);
 		}
@@ -71,8 +76,15 @@ import haxe.ds.Vector;
 
 		if (len == 0)
 			return new Path(null,0,0);
-		else
+		else if (len != ret.length)
+		{
+			var r = new Vector(len);
+			for (i in 0...len)
+				r[i] = ret[i];
+			return new Path(r,0,len);
+		} else {
 			return new Path(ret,0,len);
+		}
 	}
 
 	inline public function iterator():PathIterator<Pos>
@@ -89,13 +101,13 @@ class PathIterator<Pos : Location>
 	public function new(data:Path<Pos>)
 	{
 		this.data = data.data;
-		this.index = start;
-		this.end = start + length;
+		this.index = data.start;
+		this.end = data.start + data.length;
 	}
 
 	inline public function hasNext():Bool
 	{
-		return this.index >= end;
+		return this.index < end;
 	}
 
 	inline public function next():Pos
