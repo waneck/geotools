@@ -98,7 +98,7 @@ class PathIterator<Pos : Location>
 	var data:Vector<Pos>;
 	var index:Int;
 	var end:Int;
-	public function new(data:Path<Pos>)
+	inline public function new(data:Path<Pos>)
 	{
 		this.data = data.data;
 		this.index = data.start;

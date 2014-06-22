@@ -51,8 +51,7 @@ package geo;
 			minbound = 0;
 			maxbound = locs.length-1;
 		}
-		var d1 = null,
-				d2 = null;
+		var d1 = null,				d2 = null;
 
 		if (date < locs[mid].time)
 		{
