@@ -12,7 +12,7 @@ class TestGpx
 
 	public function test_gpx_parser()
 	{
-		var gpx = new Gpx(haxe.Resource.getString('gpx')).readAll();
+		var gpx = Gpx.readAll(haxe.Resource.getString('gpx'));
 		Assert.equals(3,gpx.length);
 		Assert.equals(17,gpx[0].length);
 		var g:PathTime<LocationTime> = gpx[0];

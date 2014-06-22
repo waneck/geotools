@@ -1,16 +1,9 @@
 package geo.input;
-import geo.input.PathInput;
 import geo.input._internal.XmlParser;
 
-class Gpx implements PathInput<LocationTime>
+class Gpx
 {
-	var input:String;
-	public function new(input)
-	{
-		this.input = input;
-	}
-
-	public function stream(onData:LocationTime->Void, onEndPath:Void->Void, onError:Dynamic->Void):Void
+	public static function stream(input:String, onData:LocationTime->Void, onEndPath:Void->Void, onError:Dynamic->Void):Void
 	{
 		var delegate = new Delegate(onData, onEndPath, onError);
 		try
@@ -23,11 +16,12 @@ class Gpx implements PathInput<LocationTime>
 		}
 	}
 
-	public function readAll():Array<Path<LocationTime>>
+	public static function readAll(input:String):Array<Path<LocationTime>>
 	{
 		var ret = [],
 				cur = null;
-		stream(function(loc) {
+		stream(input,
+		function(loc) {
 			if (cur == null)
 			{
 				cur = [];
