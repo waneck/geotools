@@ -13,6 +13,7 @@ class TestAll
 		runner.addCase(new TestGeohash());
 		runner.addCase(new TestDate());
 		runner.addCase(new TestPath());
+		runner.addCase(new TestGpx());
 
 		Report.create(runner);
 		runner.run();

@@ -1,9 +1,5 @@
 -cp tests
 -main TestAll
 -lib utest
+-resource tests/gpx-test.gpx@gpx
 --interp
---next
--cp tests
--main TestAll
--lib utest
--js bin/js.js
