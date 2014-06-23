@@ -1,6 +1,7 @@
-package geo.input;
-import geo.input._internal.XmlParser;
+package geo.io;
+import geo.io._internal.XmlParser;
 
+//TODO improve interface to abstract input and output for e.g. paths
 class Gpx
 {
 	public static function stream(input:String, onData:LocationTime->Void, onEndPath:Void->Void, onError:Dynamic->Void):Void

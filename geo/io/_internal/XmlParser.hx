@@ -1,4 +1,4 @@
-package geo.input._internal;
+package geo.io._internal;
 using StringTools;
 
 extern private class S {

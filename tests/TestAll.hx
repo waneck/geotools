@@ -14,6 +14,7 @@ class TestAll
 		runner.addCase(new TestDate());
 		runner.addCase(new TestPath());
 		runner.addCase(new TestGpx());
+		runner.addCase(new TestKml());
 
 		Report.create(runner);
 		runner.run();

@@ -1,6 +1,6 @@
 package geo.tests;
 import geo.*;
-import geo.input.*;
+import geo.io.*;
 import utest.Assert;
 
 class TestGpx
@@ -31,6 +31,11 @@ class TestGpx
 		Assert.same(new LocationTime(1.179813385,22.888710022,TzDate.fromIso('2014-03-26T00:51:17Z').date), g[1]);
 		Assert.same(new LocationTime(1.179523468,22.888351440,TzDate.fromIso('2014-03-26T00:51:42Z').date), g[2]);
 		Assert.same(new LocationTime(1.179492950,22.888248444,TzDate.fromIso('2014-03-26T02:54:35Z').date), g[g.length-1]);
+
+		var kml = new Kml('Gpx Test');
+		for (g in gpx)
+			kml = kml.next('gpx test') + g;
+		kml.save('test.kml');
 	}
 
 }
