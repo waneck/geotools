@@ -112,7 +112,7 @@ import haxe.ds.Vector;
 		if (len == 0)
 		{
 			return new Path(null,0,0);
-		// } else if (len != ret.length) {
+		// } else if (len <= ret.length / 2) {
 		// 	var r = new Vector(len);
 		// 	Vector.blit(ret,0,r,0,len);
 		// 	return new Path(r,0,len);

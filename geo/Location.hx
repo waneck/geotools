@@ -33,6 +33,73 @@ class Location
 		return R * c;
 	}
 
+	public function sqrDist(to:Location):Float
+	{
+		var lat = this.lat - to.lat,
+				lon = this.lon - to.lon;
+		return lat * lat + lon * lon;
+	}
+
+	/**
+		From the segment defined by `segPointA` and `segPointB`, find the interpolation of the closest point to `this`.
+	**/
+	public function segInterpolation(segPointA:Location, segPointB:Location):Float
+	{
+		return segInterpolationInline(segPointA, segPointB);
+	}
+
+	@:extern inline public function segInterpolation(segPointA:Location, segPointB:Location):Float
+	{
+		var x1 = segPointA.lon;
+		var x2 = segPointB.lon;
+		var y1 = segPointA.lat;
+		var y2 = segPointB.lat;
+		var x3 = this.lon;
+		var y3 = this.lat;
+
+		// point -> point
+		var dp0 = (x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3);
+		var dp1 = (x2 - x3) * (x2 - x3) + (y2 - y3) * (y2 - y3);
+		// point -> line
+		var u = ( (x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1) ) / ( (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) );
+		if (u <= 1 && u >= 0)
+		{
+			//interseccao
+			var x = x1 + u * (x2 - x1);
+			var y = y1 + u * (y2 - y1);
+			dr = (x - x3) * (x - x3) + (y - y3) * (y - y3);
+		}
+		if (dp0 < dr && dp0 < dp1)
+		{
+			u = 0;
+		} else if (dp1 < dr && dp1 < dp0) {
+			u = 1;
+		}
+
+		return u;
+	}
+
+	/**
+		From the line defined by segment `segPointA` and `segPointB`, find the interpolation value of the closest point to `this`
+	**/
+	public function lineInterpolation(segPointA:Location, segPointB:Location):Float
+	{
+		return lineInterpolationInline(segPointA,segPointB);
+	}
+
+	@:extern inline public function lineInterpolationInline(segPointA:Location, segPointB:Location):Float
+	{
+		var x1 = segPointA.lon;
+		var x2 = segPointB.lon;
+		var y1 = segPointA.lat;
+		var y2 = segPointB.lat;
+		var x3 = this.lon;
+		var y3 = this.lat;
+
+		// point -> line
+		return ( (x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1) ) / ( (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) );
+	}
+
 	public function toString()
 	{
 		return '($lat,$lon)';
