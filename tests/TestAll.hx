@@ -16,6 +16,9 @@ class TestAll
 		runner.addCase(new TestGpx());
 		runner.addCase(new TestKml());
 
+		runner.addCase(new TestMatrix());
+		runner.addCase(new TestKalman());
+
 		Report.create(runner);
 		runner.run();
 	}
