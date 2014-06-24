@@ -19,9 +19,13 @@ import haxe.ds.Vector;
 		return data[start + at];
 	}
 
-	inline public function expand():Path<Pos>
+	public function expand():Path<Pos>
 	{
-		return new Path(data);
+		var data = data;
+		var len = data.length;
+		while (len > 0 && data[len-1] == null)
+			len--;
+		return new Path(data,0,len);
 	}
 
 	inline public function constrain(start:Int, length=-1):Path<Pos>
@@ -51,17 +55,48 @@ import haxe.ds.Vector;
 
 	inline public function map<OtherPos : Location>(fn:Pos->OtherPos):Path<OtherPos>
 	{
-		var ret = new haxe.ds.Vector(this.data.length),
-				data = data;
-		for (i in start...(start + length))
-		{
-			ret[i] = fn(data[i]);
-		}
-
-		return new Path(ret,0,length);
+		return mapInternal(fn,new Vector(length));
 	}
 
-	public function filter(fn:Pos->Bool):Path<Pos>
+	@:extern inline public function mapInline<OtherPos : Location>(fn:Pos->OtherPos):Path<OtherPos>
+	{
+		var ret = new Vector(length);
+		var data = data,
+				len = 0;
+		for (i in start...(start + length))
+		{
+			var r = fn(data[i]);
+			if (r != null)
+			{
+				ret[len++] = r;
+			}
+		}
+
+		return new Path(ret,0,len);
+	}
+
+	function mapInternal<OtherPos : Location>(fn:Pos->OtherPos, ret:Vector<OtherPos>):Path<OtherPos>
+	{
+		var data = data,
+				len = 0;
+		for (i in start...(start + length))
+		{
+			var r = fn(data[i]);
+			if (r != null)
+			{
+				ret[len++] = r;
+			}
+		}
+
+		return new Path(ret,0,len);
+	}
+
+	inline public function filter(fn:Pos->Bool):Path<Pos>
+	{
+		return filterInternal(fn,new Vector(length));
+	}
+
+	@:extern inline public function filterInline(fn:Pos->Bool):Path<Pos>
 	{
 		var ret = new Vector(length),
 				len = 0;
@@ -75,13 +110,36 @@ import haxe.ds.Vector;
 		}
 
 		if (len == 0)
-			return new Path(null,0,0);
-		else if (len != ret.length)
 		{
-			var r = new Vector(len);
-			for (i in 0...len)
-				r[i] = ret[i];
-			return new Path(r,0,len);
+			return new Path(null,0,0);
+		// } else if (len != ret.length) {
+		// 	var r = new Vector(len);
+		// 	Vector.blit(ret,0,r,0,len);
+		// 	return new Path(r,0,len);
+		} else {
+			return new Path(ret,0,len);
+		}
+	}
+
+	function filterInternal(fn:Pos->Bool, ret:Vector<Pos>):Path<Pos>
+	{
+		var len = 0;
+		for (i in start...(start + length))
+		{
+			var pos = data[i];
+			if (fn(pos))
+			{
+				ret[len++] = pos;
+			}
+		}
+
+		if (len == 0)
+		{
+			return new Path(null,0,0);
+		// } else if (len != ret.length) {
+		// 	var r = new Vector(len);
+		// 	Vector.blit(ret,0,r,0,len);
+		// 	return new Path(r,0,len);
 		} else {
 			return new Path(ret,0,len);
 		}

@@ -38,7 +38,7 @@ class XmlParser
 
 	static public function parse(str:String, delegate)
 	{
-		doParse(str, 0, null, delegate);
+		doParse(str, 0, "", delegate);
 	}
 
 	static function doParse(str:String, p:Int = 0, parent:String, delegate:AbstractXmlDelegate):Int

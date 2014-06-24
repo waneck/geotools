@@ -371,5 +371,10 @@ import geo.Units;
 		return this >= minDateIncluded.getTime() && this <= maxDateIncluded.getTime();
 	}
 
+	@:extern inline public function float():Float
+	{
+		return this.float();
+	}
+
 }
 

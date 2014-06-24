@@ -1,4 +1,5 @@
 package geo;
+import haxe.ds.Vector;
 
 @:dce @:forward abstract PathTime<T:LocationTime>(Path<T>) from Path<T> to Path<T>
 {
@@ -10,6 +11,90 @@ package geo;
 	@:arrayAccess @:extern inline public function byIndex(idx:Int):T
 	{
 		return this.get(idx);
+	}
+
+	/**
+		Merges pieces of PathTime into a larger PathTime. Each PathTime is of course expected to be sorted by time
+	**/
+	inline public static function merge<T:LocationTime>(array:Array<PathTime<T>>, removeOverlaps=false):PathTime<T>
+	{
+		if (array.length <= 1)
+		{
+			if (array.length == 0)
+				return new Path(null,0,0);
+			else
+				return array[0];
+		} else {
+			var len = 0;
+			for (a in array)
+				len += a.length;
+			var merged = new Vector<T>(len);
+
+			return mergeInternal(array,removeOverlaps,merged);
+		}
+	}
+
+	private static function mergeInternal<T:LocationTime>(array:Array<PathTime<T>>, removeOverlaps:Bool, merged:Vector<T>):PathTime<T>
+	{
+		var all = array.copy();
+		all.sort(function(v1,v2) return Reflect.compare(v1[v1.length-1].time, v2[v2.length-1].time));
+
+		//TODO: optimize to O(n)
+		var len = merged.length,
+				pos = 0;
+		for (a in all)
+		{
+			var i = 0;
+			if (removeOverlaps)
+			{
+				while(pos > 0 && i < a.length && a[i].time < merged[pos - 1].time)
+					i++;
+			}
+
+			var len = a.length;
+			if (i < len)
+				Vector.blit(a.data,a.start + i,merged,pos,len - i);
+			pos += len - i;
+		}
+
+		quicksort(merged, 0, pos - 1);
+
+		return new Path(merged,0,pos);
+
+		// var indices = new Vector<Int>(array.length);
+		// var smaller = Math.POSITIVE_INFINITY,
+		// 		smallerIndex = 0,
+		// 		next = Math.POSITIVE_INFINITY,
+		// 		nextIndex = 0;
+		// for (a in array)
+		// {
+		// 	var t = a[0].time.float();
+		// 	if (t < smaller)
+		// 	{
+		// 		next = smaller;
+		// 		smallerIndex =
+		// 	}
+		// }
+	}
+
+	static function quicksort<T:LocationTime>( buf:Vector<T>, lo : Int, hi : Int ) : Void
+	{
+		var i = lo, j = hi;
+		var p = buf[(i + j) >> 1].time;
+		while ( i <= j )
+		{
+			while ( buf[i].time < p ) i++;
+			while ( buf[j].time > p ) j--;
+			if ( i <= j )
+			{
+				var t = buf[i];
+				buf[i++] = buf[j];
+				buf[j--] = t;
+			}
+		}
+
+		if( lo < j ) quicksort( buf, lo, j );
+		if( i < hi ) quicksort( buf, i, hi );
 	}
 
 	public function byTimeRelative(date:UtcDate, expand=true):LocationTime
