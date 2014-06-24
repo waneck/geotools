@@ -2,6 +2,7 @@ package geo.filters;
 import geo.math.Kalman;
 import geo.math.Matrix;
 import geo.Location;
+import geo.units.*;
 
 class KalmanFilter
 {
@@ -105,10 +106,10 @@ class KalmanFilter
 		return calculateVelocity();
 	}
 
-	public function update(p:Location, secondsSinceLastUpdate:Float):Void
+	public function update(p:Location, secondsSinceLastUpdate:Seconds):Void
 	{
 		this.observedPosition = p;
-		this.setSecondsPerTimestep(secondsSinceLastUpdate);
+		this.setSecondsPerTimestep(secondsSinceLastUpdate.float());
 		//f.observation = new Matrix(2, 1, [ p.lat * 1000.0, p.lon * 1000.0 ]);
 		f.observation.set(0, 0, p.lat * 1000);
 		f.observation.set(1, 0, p.lon * 1000);

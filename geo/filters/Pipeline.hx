@@ -3,12 +3,13 @@ import haxe.ds.Vector;
 
 class Pipeline<T:Location>
 {
-	var path:Path<T>;
+	var dst:Vector<T>;
 	var length:Int;
-	private function new(path:Path<T>, src:Path<T>)
+	private function new(dst:Vector<T>, src:Path<T>)
 	{
-		Vector.blit(src.data, src.start, path.data, 0, src.length);
-		this.path = path;
+		if (src.length > 0)
+			Vector.blit(src.data, src.start, dst, 0, src.length);
+		this.dst = dst;
 		this.length = src.length;
 	}
 
@@ -19,7 +20,7 @@ class Pipeline<T:Location>
 
 	public function map(fn:T->Null<T>):Pipeline<T>
 	{
-		var data = path.data,
+		var data = dst,
 				len = 0;
 		for (i in 0...this.length)
 		{
@@ -34,9 +35,9 @@ class Pipeline<T:Location>
 
 	public function end():Path<T>
 	{
-		var ret = new Path(path.data, 0, this.length);
+		var ret = new Path(dst, 0, this.length);
 		// make sure this cannot be used anymore
-		this.path = null;
+		this.dst = null;
 		return ret;
 	}
 }
