@@ -4,7 +4,7 @@ import geo.units.*;
 
 abstract Kml(KmlState)
 {
-	public function new(name:String, ?description)
+	public function new(name:String="", ?description)
 	{
 		this = new KmlState(name,description);
 	}

@@ -33,6 +33,12 @@ class Pipeline<T:Location>
 		return this;
 	}
 
+	public function unsafe(fn:Vector<T>->Int->Int):Pipeline<T>
+	{
+		this.length = fn(dst,this.length);
+		return this;
+	}
+
 	public function end():Path<T>
 	{
 		var ret = new Path(dst, 0, this.length);
