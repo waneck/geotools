@@ -36,41 +36,16 @@ class PathMatcher<A:Location>
 		this.direction = Direction.BothWays;
 	}
 
-	public static function matchPaths<A:Location,B:Location>(pathWay:Path<A>, direction:Direction, geo:Path<B>, dropUnmatched=true):Meters
+	public static function matchPaths<A:Location,B:Location>(pathWay:Path<A>, direction:Direction, geo:Path<B>):Meters
 	{
-		var d = .0;
-		var all = [];
-		var i = -1,
-				len = geo.length-1;
-
+		var d = 0.0;
 		var matcher = new PathMatcher(pathWay, direction);
-
-		while (++i < len)
+		var max = geo.length - 1;
+		for (i in 0...geo.length)
 		{
-			var g = geo.get(i), g1 = geo.get(i+1);
-
-			matcher.match(g,g1);
-			all.push(matcher.minDist);
-			// d += index.dmin;
+			d += matcher.match(geo.get(i), direction == Direction.BothWays || i >= max ? null : geo.get(i+1)).minDist.float();
 		}
-		if (dropUnmatched)
-		{
-			all.sort(Reflect.compare);
-			for (i in 0...(all.length - Std.int(all.length / 10)))
-				d += all[i].float();
-		} else {
-			for (i in all)
-				d += i.float();
-		}
-
-		var d = dropUnmatched ? d / (all.length * .9) : d / all.length;
-		if (all.length == 0)
-		{
-			matcher.direction = Direction.BothWays;
-			return matcher.match(geo.get(0)).minDist;
-		}
-
-		return d;
+		return d / geo.length;
 	}
 
 	/**
@@ -83,7 +58,7 @@ class PathMatcher<A:Location>
 		var maxAngle = maxAngle,
 				dir = direction,
 				start = path.start,
-				end = start + path.length,
+				end = start + path.length - 1,
 				path = path.data;
 
 		minDist = maxSquareDistance;
@@ -173,9 +148,9 @@ class PathMatcher<A:Location>
 		{
 			var gp = Location.lerp(path[pathIndex], path[pathIndex + 1], interpolation);
 			minDist = gp.dist(p0).float() / 1000;
-		}
-		else
+		} else {
 			minDist = path[pathIndex+1].dist(p0).float() / 1000;
+		}
 		return this;
 	}
 }

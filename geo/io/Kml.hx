@@ -31,7 +31,7 @@ abstract Kml(KmlState)
 		if (color != null && color != this.lineColor)
 		{
 			this.lineStyle = null;
-			this.iconColor = color;
+			this.lineColor = color;
 		}
 		return t();
 	}
