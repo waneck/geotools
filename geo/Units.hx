@@ -9,3 +9,5 @@ typedef Hours = geo.units.Hours;
 typedef Month = geo.units.Month;
 typedef DayOfWeek = geo.units.DayOfWeek;
 typedef Color = geo.units.Color;
+typedef Radians = geo.units.Radians;
+typedef Degrees = geo.units.Degrees;

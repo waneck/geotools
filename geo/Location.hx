@@ -15,6 +15,19 @@ class Location
 		this.lon = longitude;
 	}
 
+	/**
+		Returns a Location from the `interpolation` of `from` to `to`
+	**/
+	public static function lerp(from:Location, to:Location, interpolation:Float):Location
+	{
+		if (interpolation == 0)
+			return from;
+		else if (interpolation == 1)
+			return to;
+		else
+			return new Location(from.lat + interpolation * (to.lat - from.lat), from.lon + interpolation * (to.lon - from.lon));
+	}
+
 	static inline var R = 6371 * 1000;
   static inline var toRad = 0.017453292519943295;
 
@@ -48,7 +61,7 @@ class Location
 		return segInterpolationInline(segPointA, segPointB);
 	}
 
-	@:extern inline public function segInterpolation(segPointA:Location, segPointB:Location):Float
+	@:extern inline public function segInterpolationInline(segPointA:Location, segPointB:Location):Float
 	{
 		var x1 = segPointA.lon;
 		var x2 = segPointB.lon;
@@ -62,6 +75,7 @@ class Location
 		var dp1 = (x2 - x3) * (x2 - x3) + (y2 - y3) * (y2 - y3);
 		// point -> line
 		var u = ( (x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1) ) / ( (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) );
+		var dr = Math.POSITIVE_INFINITY;
 		if (u <= 1 && u >= 0)
 		{
 			//interseccao
