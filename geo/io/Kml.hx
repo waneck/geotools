@@ -172,7 +172,7 @@ abstract Kml(KmlState)
 		return t();
 	}
 
-	public function path<T:Location>(label:String, ?description:KmlDescription, path:Path<T>):Kml
+	public function path<T:Location>(label:String, ?description:KmlDescription, ?timestamp:UtcDate, path:Path<T>):Kml
 	{
 		var buf = new StringBuf();
 		if (label != null)
@@ -182,6 +182,10 @@ abstract Kml(KmlState)
 		if (description != null)
 		{
 			buf.add('<description>$description</description>');
+		}
+		if (timestamp.getTime() > 0)
+		{
+			buf.add('<TimeStamp><when>${timestamp}</when></TimeStamp>');
 		}
 		buf.add('<LineString><coordinates>');
 		path.iter(function(loc) {
@@ -278,6 +282,15 @@ abstract Kml(KmlState)
 			out.writeString('</Style>\n');
 		}
 
+		if (this.name != null)
+		{
+			out.writeString('<name>${this.name}</name>');
+		}
+		if (this.description != null)
+		{
+			out.writeString('<description>${this.description}</description>');
+		}
+
 		for (d in data)
 		{
 			if (d.tag != null)
@@ -304,7 +317,9 @@ abstract Kml(KmlState)
 #if sys
 	@:extern inline public function save(filename:String):Void
 	{
-		consolidate( sys.io.File.write(filename) );
+		var w =sys.io.File.write(filename);
+		consolidate( w );
+		w.close();
 	}
 #end
 }
