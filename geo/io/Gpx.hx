@@ -17,27 +17,42 @@ class Gpx
 		}
 	}
 
-	public static function readAll(input:String):Array<Path<LocationTime>>
+	public static function readAll(input:String):Array<{ path:Path<LocationTime>, name:String }>
 	{
 		var ret = [],
-				cur = null;
-		stream(input,
-		function(loc) {
+				cur = null,
+				delegate:Delegate = null;
+		function onData(loc)
+		{
 			if (cur == null)
 			{
 				cur = [];
-				ret.push(cur);
+				ret.push({ name: delegate.name, path:cur });
 			}
 			cur.push(loc);
-		},
-		function() {
-			cur = null;
-		},
-		function(err:Dynamic) {
-			throw err;
-		});
+		}
 
-		return [ for (r in ret) Path.fromArray(r) ];
+		function onEndPath()
+		{
+			cur = null;
+		}
+
+		function onError(err:Dynamic)
+		{
+			throw err;
+		}
+
+		delegate = new Delegate(onData, onEndPath, onError);
+		try
+		{
+			XmlParser.parse( input, delegate );
+		}
+		catch(e:Dynamic)
+		{
+			onError(e);
+		}
+
+		return [ for (r in ret) { name:r.name, path:Path.fromArray(r.path) } ];
 	}
 
 }
@@ -52,6 +67,9 @@ private class Delegate extends AbstractXmlDelegate
 	var lon:Null<Float>;
 	var time:Null<TzDate>;
 
+	public var name(default,null):String;
+	var parent:String;
+
 	public function new(onData, onEndPath, onError)
 	{
 		this.onData = onData;
@@ -64,7 +82,8 @@ private class Delegate extends AbstractXmlDelegate
 		// trace('beginProcessChild',parentName,name);
 		switch [parentName, name]
 		{
-			case [_, 'gpx'] | ['gpx', "trk"] | ["trk", "trkseg"] | ["trkseg", "trkpt"] | ["trkpt", _]:
+			case [_, 'gpx'] | ['gpx', "trk"] | ["trk", "trkseg"] | ["trkseg", "trkpt"] | ["trkpt", _] | [_,"name"]:
+				this.parent = parentName;
 				return this;
 			case _:
 				return null;
@@ -98,6 +117,8 @@ private class Delegate extends AbstractXmlDelegate
 			if (this.time != null)
 				throw "Duplicate time definition at " + lat + " , " + lon;
 			this.time = TzDate.fromIso(data.substring(start,end));
+		} else if (parent == "name" && (this.parent == "trk" || this.parent == "trkseg")) {
+			this.name = data.substring(start,end);
 		}
 	}
 
@@ -109,6 +130,8 @@ private class Delegate extends AbstractXmlDelegate
 			if (this.time != null)
 				throw "Duplicate time definition at " + lat + " , " + lon;
 			this.time = TzDate.fromIso(data);
+		} else if (parent == "name" && (this.parent == "trk" || this.parent == "trkseg")) {
+			this.name = data;
 		}
 	}
 
