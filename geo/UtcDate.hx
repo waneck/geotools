@@ -106,7 +106,7 @@ import geo.Units;
 
 	inline public function getHours():Hours
 	{
-		return Std.int( (this.float() / 60 * 60 ) % 24 );
+		return Std.int( (this.float() / (60 * 60) ) % 24 );
 	}
 
 	public function getDate():Int
