@@ -1,7 +1,7 @@
 package geo;
 import geo.Units;
 
-@:dce abstract UtcDate(Seconds /* secs since 1970 */)
+@:dce abstract UnixDate(Seconds /* secs since 1970 */)
 {
 	@:extern inline public function new(secs)
 	{
@@ -13,17 +13,17 @@ import geo.Units;
 		return this;
 	}
 
-	public static function now():UtcDate
+	public static function now():UnixDate
 	{
 		return Date.now();
 	}
 
-	@:from inline public static function fromDate(d:Date):UtcDate
+	@:from inline public static function fromDate(d:Date):UnixDate
 	{
-		return new UtcDate( d.getTime() / 1000 );
+		return new UnixDate( d.getTime() / 1000 );
 	}
 
-	public static function fromDay(year:Int, month:Month, day:Int):UtcDate
+	public static function fromDay(year:Int, month:Month, day:Int):UnixDate
 	{
 		var day:Float = day;
 		if (year < 1970)
@@ -58,7 +58,7 @@ import geo.Units;
 			}
 		}
 
-		return new UtcDate( day * 24 * 60 * 60 );
+		return new UnixDate( day * 24 * 60 * 60 );
 	}
 
 	public function getMonth():Month
@@ -268,19 +268,19 @@ import geo.Units;
 	}
 
 	/**
-		Drops the Date portion of the UtcDate and keeps only the time
+		Drops the Date portion of the UnixDate and keeps only the time
 	**/
-	public function dropDate():UtcDate
+	public function dropDate():UnixDate
 	{
-		return new UtcDate(this.float() % (60 * 60 * 24));
+		return new UnixDate(this.float() % (60 * 60 * 24));
 	}
 
 	/**
-		Drops the time portion of the UtcDate and keeps only the date
+		Drops the time portion of the UnixDate and keeps only the date
 	**/
-	public function dropTime():UtcDate
+	public function dropTime():UnixDate
 	{
-		return new UtcDate(Math.floor(this.float() / (60*60*24)) * 60.0 * 60 * 24);
+		return new UnixDate(Math.floor(this.float() / (60*60*24)) * 60.0 * 60 * 24);
 	}
 
 	private static inline var DAYS_IN_FOUR_YEARS = 366 + 365 + 365 + 365;
@@ -311,62 +311,62 @@ import geo.Units;
 	private static var year_months = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEB, DAYS_IN_MAR, DAYS_IN_APR, DAYS_IN_MAY, DAYS_IN_JUN, DAYS_IN_JUL, DAYS_IN_AUG, DAYS_IN_SEP, DAYS_IN_OCT, DAYS_IN_NOV, DAYS_IN_DEC ]);
 	private static var year_months_leap = haxe.ds.Vector.fromArrayCopy([ DAYS_IN_JAN, DAYS_IN_FEBL, DAYS_IN_MARL, DAYS_IN_APRL, DAYS_IN_MAYL, DAYS_IN_JUNL, DAYS_IN_JULL, DAYS_IN_AUGL, DAYS_IN_SEPL, DAYS_IN_OCTL, DAYS_IN_NOVL, DAYS_IN_DECL ]);
 
-	@:commutative @:extern @:op(A+B) inline public static function adds(lhs:UtcDate, offset:Seconds):UtcDate
+	@:commutative @:extern @:op(A+B) inline public static function adds(lhs:UnixDate, offset:Seconds):UnixDate
 	{
-		return new UtcDate(lhs.getTime() + offset);
+		return new UnixDate(lhs.getTime() + offset);
 	}
 
-	@:commutative @:extern @:op(A-B) inline public static function subs(lhs:UtcDate, offset:Seconds):UtcDate
+	@:commutative @:extern @:op(A-B) inline public static function subs(lhs:UnixDate, offset:Seconds):UnixDate
 	{
-		return new UtcDate(lhs.getTime() + offset);
+		return new UnixDate(lhs.getTime() + offset);
 	}
 
-	@:commutative @:extern @:op(A+B) inline public static function addm(lhs:UtcDate, offset:Minutes):UtcDate
+	@:commutative @:extern @:op(A+B) inline public static function addm(lhs:UnixDate, offset:Minutes):UnixDate
 	{
-		return new UtcDate(lhs.getTime() + offset);
+		return new UnixDate(lhs.getTime() + offset);
 	}
 
-	@:commutative @:extern @:op(A-B) inline public static function subm(lhs:UtcDate, offset:Minutes):UtcDate
+	@:commutative @:extern @:op(A-B) inline public static function subm(lhs:UnixDate, offset:Minutes):UnixDate
 	{
-		return new UtcDate(lhs.getTime() + offset);
+		return new UnixDate(lhs.getTime() + offset);
 	}
 
-	@:commutative @:extern @:op(A+B) inline public static function addh(lhs:UtcDate, offset:Hours):UtcDate
+	@:commutative @:extern @:op(A+B) inline public static function addh(lhs:UnixDate, offset:Hours):UnixDate
 	{
-		return new UtcDate(lhs.getTime() + offset);
+		return new UnixDate(lhs.getTime() + offset);
 	}
 
-	@:commutative @:extern @:op(A-B) inline public static function subh(lhs:UtcDate, offset:Hours):UtcDate
+	@:commutative @:extern @:op(A-B) inline public static function subh(lhs:UnixDate, offset:Hours):UnixDate
 	{
-		return new UtcDate(lhs.getTime() + offset);
+		return new UnixDate(lhs.getTime() + offset);
 	}
 
-	@:extern @:op(A>B) inline public static function gt(lhs:UtcDate, rhs:UtcDate):Bool
+	@:extern @:op(A>B) inline public static function gt(lhs:UnixDate, rhs:UnixDate):Bool
 	{
 		return lhs.getTime().float() > rhs.getTime().float();
 	}
 
-	@:extern @:op(A>=B) inline public static function gte(lhs:UtcDate, rhs:UtcDate):Bool
+	@:extern @:op(A>=B) inline public static function gte(lhs:UnixDate, rhs:UnixDate):Bool
 	{
 		return lhs.getTime().float() >= rhs.getTime().float();
 	}
 
-	@:extern @:op(A<B) inline public static function lt(lhs:UtcDate, rhs:UtcDate):Bool
+	@:extern @:op(A<B) inline public static function lt(lhs:UnixDate, rhs:UnixDate):Bool
 	{
 		return lhs.getTime().float() < rhs.getTime().float();
 	}
 
-	@:extern @:op(A<=B) inline public static function lte(lhs:UtcDate, rhs:UtcDate):Bool
+	@:extern @:op(A<=B) inline public static function lte(lhs:UnixDate, rhs:UnixDate):Bool
 	{
 		return lhs.getTime().float() <= rhs.getTime().float();
 	}
 
-	@:extern @:op(A==B) inline public static function eq(lhs:UtcDate, rhs:UtcDate):Bool
+	@:extern @:op(A==B) inline public static function eq(lhs:UnixDate, rhs:UnixDate):Bool
 	{
 		return lhs.getTime().float() == rhs.getTime().float();
 	}
 
-	inline public function between(minDateIncluded:UtcDate, maxDateIncluded:UtcDate):Bool
+	inline public function between(minDateIncluded:UnixDate, maxDateIncluded:UnixDate):Bool
 	{
 		return this >= minDateIncluded.getTime() && this <= maxDateIncluded.getTime();
 	}

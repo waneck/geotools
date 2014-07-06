@@ -3,7 +3,7 @@ import geo.units.*;
 
 @:dce @:forward abstract TimeSpan(TimeSpanData)
 {
-	@:extern inline public function new(start:UtcDate,end:UtcDate)
+	@:extern inline public function new(start:UnixDate,end:UnixDate)
 	{
 		this = (start <= end) ? new TimeSpanData(start,end) : throw 'Impossible TimeSpan: start ($start) is greater than end ($end)';
 	}
@@ -13,14 +13,14 @@ import geo.units.*;
 		return this.end.getTime() - this.start.getTime();
 	}
 
-	@:op(A+B) @:extern inline public function addDate(other:UtcDate):TimeSpan
+	@:op(A+B) @:extern inline public function addDate(other:UnixDate):TimeSpan
 	{
-		return new TimeSpan( new UtcDate(Math.min(this.start.float(), other.float())), new UtcDate(Math.max(this.end.float(), other.float())) );
+		return new TimeSpan( new UnixDate(Math.min(this.start.float(), other.float())), new UnixDate(Math.max(this.end.float(), other.float())) );
 	}
 
 	@:op(A+B) @:extern inline public function add(other:TimeSpan):TimeSpan
 	{
-		return new TimeSpan( new UtcDate(Math.min(this.start.float(), other.start.float())), new UtcDate(Math.max(this.end.float(), other.end.float())) );
+		return new TimeSpan( new UnixDate(Math.min(this.start.float(), other.start.float())), new UnixDate(Math.max(this.end.float(), other.end.float())) );
 	}
 
 	public function intersect(other:TimeSpan):Null<TimeSpan>
@@ -28,7 +28,7 @@ import geo.units.*;
 		var s = Math.max(this.start.float(), other.start.float()),
 				e = Math.min(this.end.float(), other.end.float());
 		if (s <= e)
-			return new TimeSpan(new UtcDate(s),new UtcDate(e));
+			return new TimeSpan(new UnixDate(s),new UnixDate(e));
 		else
 			return null;
 	}
@@ -43,8 +43,8 @@ import geo.units.*;
 
 @:dce private class TimeSpanData
 {
-	public var start(default,null):UtcDate;
-	public var end(default,null):UtcDate;
+	public var start(default,null):UnixDate;
+	public var end(default,null):UnixDate;
 
 	public function new(start,end)
 	{

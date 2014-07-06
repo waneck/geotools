@@ -172,7 +172,7 @@ abstract Kml(KmlState)
 		return t();
 	}
 
-	public function path<T:Location>(label:String, ?description:KmlDescription, ?timestamp:UtcDate, path:Path<T>):Kml
+	public function path<T:Location>(label:String, ?description:KmlDescription, ?timestamp:UnixDate, path:Path<T>):Kml
 	{
 		var buf = new StringBuf();
 		if (label != null)

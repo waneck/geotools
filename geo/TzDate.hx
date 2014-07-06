@@ -4,12 +4,12 @@ using StringTools;
 
 @:dce @:forward abstract TzDate(DateData)
 {
-	@:extern inline public function new(date:UtcDate, tz:Seconds=0)
+	@:extern inline public function new(date:UnixDate, tz:Seconds=0)
 	{
 		this = new DateData(date,tz.float());
 	}
 
-	@:extern inline public static function toCurrentTimezone(date:UtcDate):TzDate
+	@:extern inline public static function toCurrentTimezone(date:UnixDate):TzDate
 	{
 		return new TzDate(date,timezone());
 	}
@@ -26,17 +26,17 @@ using StringTools;
 
 	@:extern inline public function getDate():Int
 	{
-		return UtcDate.getDate( this.date.getTime().float() + this.timeZone.float() );
+		return UnixDate.getDate( this.date.getTime().float() + this.timeZone.float() );
 	}
 
 	@:extern inline public function getMonth():Month
 	{
-		return UtcDate.getMonth( this.date.getTime().float() + this.timeZone.float() );
+		return UnixDate.getMonth( this.date.getTime().float() + this.timeZone.float() );
 	}
 
 	@:extern inline public function getYear():Int
 	{
-		return UtcDate.getYear( this.date.getTime().float() + this.timeZone.float() );
+		return UnixDate.getYear( this.date.getTime().float() + this.timeZone.float() );
 	}
 
 	public static function now():TzDate
@@ -261,7 +261,7 @@ using StringTools;
 		}
 
 		if (stamp != null)
-			return new TzDate( new UtcDate(stamp), stdTimezone );
+			return new TzDate( new UnixDate(stamp), stdTimezone );
 		var stamp = 0.0;
 		if (year != null || month != null || day != null)
 		{
@@ -271,7 +271,7 @@ using StringTools;
 				throw "Missing month";
 			if (day == null)
 				throw "Missing day";
-			stamp = UtcDate.fromDay(year, month - 1, day - 1).getTime().float();
+			stamp = UnixDate.fromDay(year, month - 1, day - 1).getTime().float();
 		}
 
 		if (hour != null)
@@ -303,7 +303,7 @@ using StringTools;
 			stamp += nano / 1000000000;
 
 		stamp -= stdTimezone.float();
-		return new TzDate(new UtcDate(stamp), stdTimezone);
+		return new TzDate(new UnixDate(stamp), stdTimezone);
 	}
 
 	@:extern inline public static function fromIso(str:String):TzDate
@@ -313,38 +313,38 @@ using StringTools;
 
 	@:commutative @:extern @:op(A+B) inline public static function adds(lhs:TzDate, offset:Seconds):TzDate
 	{
-		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+		return new TzDate(new UnixDate(lhs.getTime() + offset), lhs.timeZone);
 	}
 
 	@:commutative @:extern @:op(A-B) inline public static function subs(lhs:TzDate, offset:Seconds):TzDate
 	{
-		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+		return new TzDate(new UnixDate(lhs.getTime() + offset), lhs.timeZone);
 	}
 
 	@:commutative @:extern @:op(A+B) inline public static function addm(lhs:TzDate, offset:Minutes):TzDate
 	{
-		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+		return new TzDate(new UnixDate(lhs.getTime() + offset), lhs.timeZone);
 	}
 
 	@:commutative @:extern @:op(A-B) inline public static function subm(lhs:TzDate, offset:Minutes):TzDate
 	{
-		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+		return new TzDate(new UnixDate(lhs.getTime() + offset), lhs.timeZone);
 	}
 
 	@:commutative @:extern @:op(A+B) inline public static function addh(lhs:TzDate, offset:Hours):TzDate
 	{
-		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+		return new TzDate(new UnixDate(lhs.getTime() + offset), lhs.timeZone);
 	}
 
 	@:commutative @:extern @:op(A-B) inline public static function subh(lhs:TzDate, offset:Hours):TzDate
 	{
-		return new TzDate(new UtcDate(lhs.getTime() + offset), lhs.timeZone);
+		return new TzDate(new UnixDate(lhs.getTime() + offset), lhs.timeZone);
 	}
 }
 
 @:dce class DateData
 {
-	public var date(default,null):UtcDate;
+	public var date(default,null):UnixDate;
 	public var timeZone(default,null):Seconds;
 
 	public function new(date, tz=0.0)
@@ -366,7 +366,7 @@ using StringTools;
 		var ret = new StringBuf();
 		var tz = this.timeZone.float() / 60;
 		if (tz < 0) tz = -tz;
-		UtcDate.withParts(this.date.getTime() + this.timeZone, function(year,month,day,hour,minute,sec) {
+		UnixDate.withParts(this.date.getTime() + this.timeZone, function(year,month,day,hour,minute,sec) {
 			ret.add(year);
 			ret.add('-');
 			ret.add(str(month.toInt()+1));

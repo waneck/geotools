@@ -6,7 +6,7 @@ import geo.Units;
 **/
 class LocationTime extends Location
 {
-	public var time(default,null):UtcDate;
+	public var time(default,null):UnixDate;
 
 	public function new(lat,lon,time)
 	{

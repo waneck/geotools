@@ -97,7 +97,7 @@ import haxe.ds.Vector;
 		if( i < hi ) quicksort( buf, i, hi );
 	}
 
-	public function byTimeRelative(date:UtcDate, expand=true):LocationTime
+	public function byTimeRelative(date:UnixDate, expand=true):LocationTime
 	{
 		//binary search
 		var start = this.start;
@@ -152,15 +152,15 @@ import haxe.ds.Vector;
 			d2 = locs[mid+1];
 		}
 		var pct = (date.getTime().float() - d1.time.getTime().float()) / (d2.time.getTime().float() - d1.time.getTime().float());
-		return new LocationTime( d1.lat + (d2.lat - d1.lat) * pct, d1.lon + (d2.lon - d1.lon) * pct, new UtcDate( d1.time.getTime() + (d2.time.getTime().float() - d1.time.getTime().float()) * pct ) );
+		return new LocationTime( d1.lat + (d2.lat - d1.lat) * pct, d1.lon + (d2.lon - d1.lon) * pct, new UnixDate( d1.time.getTime() + (d2.time.getTime().float() - d1.time.getTime().float()) * pct ) );
 	}
 
-	@:arrayAccess @:extern inline public function byTime(date:UtcDate):T
+	@:arrayAccess @:extern inline public function byTime(date:UnixDate):T
 	{
 		return this.data[ timeIndex(date) ];
 	}
 
-	public function timeIndex(date:UtcDate):Int
+	public function timeIndex(date:UnixDate):Int
 	{
 		//binary search
 		var start = this.start;
@@ -198,7 +198,7 @@ import haxe.ds.Vector;
 				return mid - 1 - start;
 	}
 
-	public function constrainTime(startDate:UtcDate, endDate:UtcDate):PathTime<T>
+	public function constrainTime(startDate:UnixDate, endDate:UnixDate):PathTime<T>
 	{
 		var cstart = timeIndex(startDate),
 				cend = timeIndex(endDate);
