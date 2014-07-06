@@ -95,9 +95,7 @@ class ThreadPool
 		var ret = [];
 		for (i in 0...num)
 		{
-			trace('waiting');
 			ret = ret.concat(curd.pop(true));
-			trace('ok',i,num);
 		}
 		return ret;
 	}
