@@ -1,4 +1,5 @@
 package geo;
+import geo.units.*;
 import haxe.ds.Vector;
 
 @:allow(geo) class Path<Pos : Location>
@@ -17,6 +18,17 @@ import haxe.ds.Vector;
 	@:arrayAccess inline public function get(at:Int):Pos
 	{
 		return data[start + at];
+	}
+
+	public function lengthMeters():Meters
+	{
+		var data = data,
+				len = new Meters(0);
+		for (i in start...(start+length - 1))
+		{
+			len += data[i].dist(data[i+1]);
+		}
+		return len;
 	}
 
 	public function expand():Path<Pos>

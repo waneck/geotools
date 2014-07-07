@@ -232,6 +232,9 @@ abstract Kml(KmlState)
 
 	public function fold<T>(it:Iterable<T>, fn:Kml->T->Kml):Kml
 	{
+		if (it == null)
+			return t();
+
 		var t = t();
 		for (a in it)
 		{

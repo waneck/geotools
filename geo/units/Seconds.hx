@@ -30,6 +30,11 @@ abstract Seconds(Float) from Float
 		return d.getTime() / 1000;
 	}
 
+	@:extern inline public function abs():Seconds
+	{
+		return Math.abs(this);
+	}
+
 	public function toString()
 	{
 		var s = this < 0 ? -this : this,

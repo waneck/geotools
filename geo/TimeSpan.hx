@@ -23,6 +23,16 @@ import geo.units.*;
 		return new TimeSpan( new UnixDate(Math.min(this.start.float(), other.start.float())), new UnixDate(Math.max(this.end.float(), other.end.float())) );
 	}
 
+	public function contains(date:UnixDate):Bool
+	{
+		return date >= this.start && date <= this.end;
+	}
+
+	public function expand(secs:Seconds):TimeSpan
+	{
+		return new TimeSpan( new UnixDate(this.start.getTime() - secs), new UnixDate(this.end.getTime() + secs) );
+	}
+
 	public function intersect(other:TimeSpan):Null<TimeSpan>
 	{
 		var s = Math.max(this.start.float(), other.start.float()),
