@@ -402,16 +402,21 @@ using StringTools;
 
 	inline public function getSeconds():Seconds
 	{
-		return Std.int(this.float() % 60);
+		return UnixDate.getSeconds( this.date.getTime().float() + this.timeZone.float() );
 	}
 
-	inline public function getMinutes():Int
+	inline public function getMinutes():Minutes
 	{
-		return Std.int( (this.float() / 60) % 60 );
+		return UnixDate.getMinutes( this.date.getTime().float() + this.timeZone.float() );
 	}
 
-	inline public function getHours():Int
+	inline public function getHours():Hours
 	{
-		return Std.int( (this.float() / 60 * 60 ) % 24 );
+		return UnixDate.getHours( this.date.getTime().float() + this.timeZone.float() );
+	}
+
+	@:extern inline public function getDayOfWeek():DayOfWeek
+	{
+		return UnixDate.getDayOfWeek( this.date.getTime().float() + this.timeZone.float() );
 	}
 }
