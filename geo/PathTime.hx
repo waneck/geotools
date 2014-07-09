@@ -202,6 +202,6 @@ import haxe.ds.Vector;
 	{
 		var cstart = timeIndex(startDate),
 				cend = timeIndex(endDate);
-		return this.constrain(cstart, cend - cstart);
+		return this.constrain(cstart, cend - cstart + 1);
 	}
 }
