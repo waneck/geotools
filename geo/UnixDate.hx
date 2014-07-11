@@ -242,7 +242,7 @@ import geo.Units;
 		return inlineWithParts(fn);
 	}
 
-	inline public function toString():String
+	public function toString():String
 	{
 		return withParts(function(year,month,day,hour,minute,sec) {
 			var ret = new StringBuf();
