@@ -157,7 +157,7 @@ import haxe.ds.Vector;
 
 	@:arrayAccess @:extern inline public function byTime(date:UnixDate):T
 	{
-		return this.data[ timeIndex(date) ];
+		return this.data[ this.start + timeIndex(date) ];
 	}
 
 	public function timeIndex(date:UnixDate):Int
