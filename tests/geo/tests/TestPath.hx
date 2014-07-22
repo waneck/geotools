@@ -136,6 +136,7 @@ class TestPath
 		Assert.equals(0, p.timeIndex(new UnixDate(new Hours(9))));
 		Assert.equals(0, p.timeIndex(new UnixDate(new Hours(9.4))));
 		Assert.equals(0, p.timeIndex(new UnixDate(new Hours(9.6))));
+		Assert.equals(0, p.timeIndex(new UnixDate(new Hours(10.0))));
 		Assert.equals(1, p.timeIndex(new UnixDate(new Hours(10.6))));
 		Assert.equals(39, p.timeIndex(new UnixDate(new Hours(50.6))));
 		Assert.equals(0, p.timeIndex(new UnixDate(new Hours(-1))));

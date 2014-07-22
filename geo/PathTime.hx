@@ -177,7 +177,7 @@ import haxe.ds.Vector;
 			} else if (date > imid.time) {
 				min = mid + 1;
 			} else {
-				return mid;
+				return mid - start;
 			}
 		}
 
