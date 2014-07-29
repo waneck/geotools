@@ -1,5 +1,6 @@
 package geo;
 import haxe.ds.Vector;
+import geo.units.*;
 
 @:dce @:forward abstract PathTime<T:LocationTime>(Path<T>) from Path<T> to Path<T>
 {
@@ -11,6 +12,16 @@ import haxe.ds.Vector;
 	@:arrayAccess @:extern inline public function byIndex(idx:Int):T
 	{
 		return this.get(idx);
+	}
+
+	public function expand(time:Seconds=0):PathTime<T>
+	{
+		if (time == 0)
+		{
+			return this.expand();
+		} else {
+			return new PathTime(this.expand()).constrainTime(new UnixDate(this.get(0).time.getTime() - time), new UnixDate(this.get(this.length).time.getTime() + time));
+		}
 	}
 
 	/**

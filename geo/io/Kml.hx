@@ -375,11 +375,11 @@ abstract Kml(KmlState)
 		if (pointStyle != null)
 			return pointStyle;
 		var buf = new StringBuf();
-		buf.add('<IconStyle><Icon>');
+		buf.add('<IconStyle>');
 		buf.add('<scale>${iconScale}</scale><color>${iconColor.toABGR()}</color>');
 		if (icon != null)
-			buf.add('<href>${icon}</href>');
-		buf.add('</Icon></IconStyle>');
+			buf.add('<Icon><href>${icon}</href></Icon>');
+		buf.add('</IconStyle>');
 		buf.add('<LabelStyle><scale>${labelScale}</scale><color>${labelColor.toABGR()}</color></LabelStyle>');
 		return pointStyle = buf.toString();
 	}
