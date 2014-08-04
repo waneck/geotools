@@ -114,6 +114,11 @@ class Location
 		return ( (x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1) ) / ( (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) );
 	}
 
+	public function equals(loc:Location, precision=1e7):Bool
+	{
+		return this == loc || (Std.int(this.lat * precision) - Std.int(loc.lat * precision) == 0 && Std.int(this.lon * precision) - Std.int(loc.lon * precision) == 0);
+	}
+
 	public function toString()
 	{
 		return '($lat,$lon)';

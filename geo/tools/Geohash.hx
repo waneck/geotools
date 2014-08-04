@@ -61,7 +61,7 @@ abstract Geohash(String) to String
 		return new Geohash(chars.join(''));
 	}
 
-	@:extern inline public static function fromPos(pos:Location)
+	@:extern inline public static function fromPos(pos:Location):Geohash
 	{
 		return geohash(pos);
 	}
