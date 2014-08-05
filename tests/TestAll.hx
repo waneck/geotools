@@ -19,6 +19,8 @@ class TestAll
 		runner.addCase(new TestMatrix());
 		runner.addCase(new TestKalman());
 
+		runner.addCase(new TestNetwork());
+
 		Report.create(runner);
 		runner.run();
 	}

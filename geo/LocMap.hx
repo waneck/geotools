@@ -3,7 +3,7 @@ import geo.tools.Geohash.*;
 import geo.tools.Geohash;
 import haxe.ds.StringMap;
 
-@:dce abstract LocMap<K:Location,T>(LocMapTree<K,T>)
+@:dce abstract LocMap<K:Location,V>(LocMapTree<K,V>)
 {
 	/**
 		Creates a new LocMap. The higher the precision defined, the better.
@@ -80,7 +80,7 @@ import haxe.ds.StringMap;
 	**/
 	inline public function toString():String
 	{
-		return this.keys();
+		return this.toString();
 	}
 
 	@:arrayAccess @:noCompletion public inline function arrayWrite(k:K, v:V):V
@@ -90,11 +90,12 @@ import haxe.ds.StringMap;
 	}
 }
 
-class LocMap<K:Location, V> extends haxe.ds.BalancedTree<K, V> implements Map.IMap<K,V>
+class LocMapTree<K:Location, V> extends haxe.ds.BalancedTree<K, V> implements Map.IMap<K,V>
 {
 	var precision:Float;
 	public function new(precision:Float)
 	{
+		super();
 		this.precision = precision;
 	}
 

@@ -20,6 +20,11 @@ import haxe.ds.Vector;
 		return data[start + at];
 	}
 
+	inline public function copyTo(destination:Vector<Pos>, destPos:Int):Void
+	{
+		Vector.blit(data,start,destination,destPos,length);
+	}
+
 	public function lengthMeters():Meters
 	{
 		var data = data,

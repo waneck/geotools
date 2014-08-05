@@ -4,14 +4,21 @@ import geo.network.NetworkErrors;
 
 @:forward abstract Network(AbstractNetwork) from AbstractNetwork to AbstractNetwork
 {
-	@:extern inline public function new(precision:Int)
+	@:extern inline public function new(precision=1e7)
 	{
 		this = new BasicNetwork(precision);
 	}
 }
 
-@:abstract class AbstractNetwork
+@:access(geo.network.Link) @:abstract class AbstractNetwork
 {
+	public var precision(default,null):Float;
+
+	public function new(precision=1e7)
+	{
+		this.precision = precision;
+	}
+
 	/**
 		Returns all links that share their `to` node with the `from` node from `link`.
 		Depending on the network, this may be different than calling `linksWithTo(link.from)`,
@@ -22,7 +29,7 @@ import geo.network.NetworkErrors;
 	inline public function joinedByFrom(link:Link):Array<Link>
 	{
 #if debug
-		if (link.network != this) throw LinkNotInNetwork(link);
+		if (link._network != this) throw LinkNotInNetwork(link);
 #end
 		return p_joinedByFrom(link);
 	}
@@ -42,7 +49,7 @@ import geo.network.NetworkErrors;
 	inline public function joinedByTo(link:Link):Array<Link>
 	{
 #if debug
-		if (link.network != this) throw LinkNotInNetwork(link);
+		if (link._network != this) throw LinkNotInNetwork(link);
 #end
 		return p_joinedByTo(link);
 	}
@@ -76,17 +83,20 @@ import geo.network.NetworkErrors;
 
 	/**
 		Gets a link that is defined by `from` and `to`.
-		@throws `LinkNotFound` if the link is not present
+		@throws `InvalidLink` if the link is not present
 	**/
 	public function getLink(from:Location, to:Location):Link
 	{
-		return throw LinkNotFound(from,to);
+		return throw InvalidLink(from,to);
 	}
 
 	/**
-		This function is called internally from new Link(), and registers the link - if it's not registered already
+		Call this function to register the link `link` to `this` network.
+		If `link` is already registered in another network, an error will be thrown.
+		If another link is defined with the same `to` and `from`, it will either be replaced - if `replace` is true -
+		or an error will be thrown
 	**/
-	public function registerLink(link:Link):Void
+	public function addLink(link:Link, replace:Bool):Void
 	{
 		throw "NI";
 	}
@@ -95,11 +105,10 @@ import geo.network.NetworkErrors;
 @:access(geo.network.Link) class BasicNetwork extends AbstractNetwork
 {
 	private var nodes:LocMap<Location,Array<Link>>;
-	private var precision:Float;
 
 	public function new(precision:Float=1e7)
 	{
-		this.precision = precision;
+		super(precision);
 		this.nodes = new LocMap(precision);
 	}
 
@@ -137,34 +146,55 @@ import geo.network.NetworkErrors;
 	{
 		var n = nodes[from];
 		if (n == null)
-			throw LinkNotFound(from,to);
+			throw InvalidLink(from,to);
 		for (l in n)
 			if (l.to.eq(to,precision))
 				return l;
-		throw LinkNotFound(from,to);
+		throw InvalidLink(from,to);
 	}
 
-	public function registerLink(link:Link):Void
+	override public function addLink(link:Link, replace:Bool):Void
 	{
-		if (link.network != null)
-			if (link.network == this)
+		if (link._network != null)
+			if (link._network == this)
 				return;
 			else
-				throw "Link " + link + " is already on another network";
+				throw LinkNotInNetwork(link);
 		var nfrom = nodes[link.from];
 		if (nfrom == null)
 		{
 			nfrom = nodes[link.from] = [];
 		}
+		var nto = nodes[link.to];
 		if (nto == null)
 		{
 			nto = nodes[link.to] = [];
 		}
+
+		var cont = true;
 		for (f in nfrom)
+		{
+			if (!cont) break;
 			for (t in nto)
+			{
 				if (f == t)
-					throw "A link with same nodes as this " + link + " is already present in this network: " + f;
+				{
+					if (replace)
+					{
+						f._network = null;
+						nto.remove(f);
+						nfrom.remove(t);
+						cont = false;
+						break;
+					} else {
+						throw LinkAlreadyExists(f,link);
+					}
+				}
+			}
+		}
+
 		nto.push(link);
 		nfrom.push(link);
+		link._network = this;
 	}
 }
