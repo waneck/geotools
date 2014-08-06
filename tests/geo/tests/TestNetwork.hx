@@ -34,33 +34,61 @@ class TestNetwork
 			Path.fromArray([ for (i in 0...11) new Location(0, 1 + i / 10) ]));
 		net.addLink(link2,false);
 
-		var toLinks = link1.toLinks();
-		Assert.equals(1,toLinks.length);
-		Assert.equals(link2,toLinks[0]);
+		var outgoing = link1.outgoing();
+		Assert.equals(1,outgoing.length);
+		Assert.equals(link2,outgoing[0]);
 
-		var fromLinks = link2.fromLinks();
-		Assert.equals( 1, fromLinks.length );
-		Assert.equals( link1,fromLinks[0] );
+		var incoming = link2.incoming();
+		Assert.equals( 1, incoming.length );
+		Assert.equals( link1, incoming[0] );
 
 		var link1Repl = new Link(
 			new Location(0, 0.00000004),
 			new Location(0.000000001, 0.9999999999999),
 			Path.fromArray([ for (i in 0...21) new Location(0, i / 20) ]));
+		raises(function() net.addLink(link1Repl,false), NetworkError);
+		net.addLink(link1Repl, true);
+		raises(function() link1.network, NetworkError);
+		raises(function() link1.outgoing());
+
+		link1 = link1Repl;
+		outgoing = link1.outgoing();
+		Assert.equals(1,outgoing.length);
+		Assert.equals(link2,outgoing[0]);
+
+		incoming = link2.incoming();
+		Assert.equals( 1, incoming.length );
+		Assert.equals( link1,incoming[0] );
+
+		var link3 = new Link(
+			new Location(0,1),
+			new Location(1,0));
+		net.addLink(link3,false);
+
+		outgoing = link1.outgoing();
+		Assert.equals(2,outgoing.length);
+		Assert.isTrue(link2 == outgoing[0] || link2 == outgoing[1]);
+		Assert.isTrue(link3 == outgoing[0] || link3 == outgoing[1]);
+
+		incoming = link2.incoming();
+		Assert.equals( 1, incoming.length );
+		Assert.equals( link1, incoming[0] );
 	}
 
 	static function raises(method:Void -> Void, ?type:Dynamic, ?msgNotThrown : String , ?msgWrongType : String, ?pos : haxe.PosInfos)
 	{
-		if(type == null)
-			type = String;
 		try {
 			method();
 			if (null == msgNotThrown)
 				msgNotThrown = "exception not raised";
 			Assert.fail(msgNotThrown, pos);
 		} catch (ex : Dynamic) {
-			if (null == msgWrongType)
-				msgWrongType = "unexpected type for exception: "  + ex;
-			Assert.isTrue(Std.is(ex,type),msgWrongType,pos);
+			if (type != null)
+			{
+				if (null == msgWrongType)
+					msgWrongType = "unexpected type for exception: "  + ex;
+				Assert.isTrue(Std.is(ex,type),msgWrongType,pos);
+			}
 		}
 	}
 

@@ -107,6 +107,7 @@ class LocMapTree<K:Location, V> extends haxe.ds.BalancedTree<K, V> implements Ma
 				lon1 = Std.int(precision * (prec5 + k1.lon)),
 				lat2 = Std.int(precision * (prec5 + k2.lat)),
 				lon2 = Std.int(precision * (prec5 + k2.lon));
+		trace('comparing',k1,k2,lat1-lat2,lon1-lon2);
 		var ret = lat1 - lat2;
 		if (ret == 0)
 			return lon1 - lon2;

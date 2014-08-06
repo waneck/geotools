@@ -80,19 +80,19 @@ class Link
 	}
 
 	/**
-		Returns all links that connect to `this` link.
+		Returns all links that connect to `this` link
 		The results should *not* contain `this` link
 	**/
-	inline public function fromLinks():Array<Link>
+	inline public function incoming():Array<Link>
 	{
 		return _network.joinedByFrom(this);
 	}
 
 	/**
-		Returns all links that connect to `this` link.
+		Returns all links that connect from `this` link
 		The results should *not* contain `this` link
 	**/
-	inline public function toLinks():Array<Link>
+	inline public function outgoing():Array<Link>
 	{
 		return _network.joinedByTo(this);
 	}
