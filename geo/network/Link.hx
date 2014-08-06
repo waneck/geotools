@@ -1,7 +1,7 @@
 package geo.network;
 import haxe.ds.Vector;
 import geo.*;
-import geo.network.NetworkErrors;
+import geo.network.NetworkError;
 
 class Link
 {
@@ -136,5 +136,10 @@ class Link
 		} else {
 			return new Link(from,to);
 		}
+	}
+
+	public function toString()
+	{
+		return 'Link ($from - $to)';
 	}
 }

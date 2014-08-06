@@ -101,11 +101,12 @@ class LocMapTree<K:Location, V> extends haxe.ds.BalancedTree<K, V> implements Ma
 
 	override function compare(k1:Location, k2:Location):Int
 	{
-		var precision = precision;
-		var lat1 = Std.int(precision * k1.lat),
-				lon1 = Std.int(precision * k1.lon),
-				lat2 = Std.int(precision * k2.lat),
-				lon2 = Std.int(precision * k2.lon);
+		var precision = precision,
+				prec5 = .5 * (1 / precision);
+		var lat1 = Std.int(precision * (prec5 + k1.lat)),
+				lon1 = Std.int(precision * (prec5 + k1.lon)),
+				lat2 = Std.int(precision * (prec5 + k2.lat)),
+				lon2 = Std.int(precision * (prec5 + k2.lon));
 		var ret = lat1 - lat2;
 		if (ret == 0)
 			return lon1 - lon2;

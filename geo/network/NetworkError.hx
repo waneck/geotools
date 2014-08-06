@@ -1,7 +1,7 @@
 package geo.network;
 import geo.*;
 
-enum NetworkErrors
+enum NetworkError
 {
 	/**
 		The link is not in the specified network or it cannot be a part of the specified network

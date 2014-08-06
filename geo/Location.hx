@@ -118,7 +118,8 @@ class Location
 	{
 		if (loc == null)
 			return false;
-		return this == loc || (Std.int(this.lat * precision) - Std.int(loc.lat * precision) == 0 && Std.int(this.lon * precision) - Std.int(loc.lon * precision) == 0);
+		var prec5 = .5 * (1 / precision);
+		return this == loc || (Std.int((prec5 + this.lat) * precision) - Std.int((prec5 + loc.lat) * precision) == 0 && Std.int((prec5 + this.lon) * precision) - Std.int((prec5 + loc.lon) * precision) == 0);
 	}
 
 	public function toString()

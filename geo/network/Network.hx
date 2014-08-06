@@ -1,6 +1,6 @@
 package geo.network;
 import geo.*;
-import geo.network.NetworkErrors;
+import geo.network.NetworkError;
 
 @:forward abstract Network(AbstractNetwork) from AbstractNetwork to AbstractNetwork
 {
@@ -13,10 +13,14 @@ import geo.network.NetworkErrors;
 @:access(geo.network.Link) @:abstract class AbstractNetwork
 {
 	public var precision(default,null):Float;
+	public var name(default,null):String;
 
-	public function new(precision=1e7)
+	private static var id = 0;
+
+	public function new(precision=1e7,?name)
 	{
 		this.precision = precision;
+		this.name = name != null ? name : "anon-" + id++;
 	}
 
 	/**
@@ -100,15 +104,20 @@ import geo.network.NetworkErrors;
 	{
 		throw "NI";
 	}
+
+	public function toString()
+	{
+		return 'Network $name';
+	}
 }
 
 @:access(geo.network.Link) class BasicNetwork extends AbstractNetwork
 {
 	private var nodes:LocMap<Location,Array<Link>>;
 
-	public function new(precision:Float=1e7)
+	public function new(precision:Float=1e7,?name)
 	{
-		super(precision);
+		super(precision,name);
 		this.nodes = new LocMap(precision);
 	}
 
