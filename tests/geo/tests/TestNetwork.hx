@@ -73,6 +73,12 @@ class TestNetwork
 		incoming = link2.incoming();
 		Assert.equals( 1, incoming.length );
 		Assert.equals( link1, incoming[0] );
+
+		var links = Lambda.array(net);
+		Assert.equals(links.length,3);
+		Assert.isTrue(links.indexOf(link1) >= 0);
+		Assert.isTrue(links.indexOf(link2) >= 0);
+		Assert.isTrue(links.indexOf(link3) >= 0);
 	}
 
 	static function raises(method:Void -> Void, ?type:Dynamic, ?msgNotThrown : String , ?msgWrongType : String, ?pos : haxe.PosInfos)

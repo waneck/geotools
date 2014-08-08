@@ -105,6 +105,11 @@ import geo.network.NetworkError;
 		throw "NI";
 	}
 
+	public function iterator():Iterator<Link>
+	{
+		throw "NI";
+	}
+
 	public function toString()
 	{
 		return 'Network $name';
@@ -114,11 +119,13 @@ import geo.network.NetworkError;
 @:access(geo.network.Link) class BasicNetwork extends AbstractNetwork
 {
 	private var nodes:LocMap<Location,Array<Link>>;
+	private var links:Map<Link,Bool>;
 
 	public function new(precision:Float=1e7,?name)
 	{
 		super(precision,name);
 		this.nodes = new LocMap(precision);
+		this.links = new Map();
 	}
 
 	override private function p_joinedByFrom(link:Link):Array<Link>
@@ -193,6 +200,7 @@ import geo.network.NetworkError;
 						f._network = null;
 						nto.remove(f);
 						nfrom.remove(t);
+						links.remove(t);
 						cont = false;
 						break;
 					} else {
@@ -202,8 +210,14 @@ import geo.network.NetworkError;
 			}
 		}
 
+		links[link] = true;
 		nto.push(link);
 		nfrom.push(link);
 		link._network = this;
+	}
+
+	override public function iterator():Iterator<Link>
+	{
+		return links.keys();
 	}
 }
