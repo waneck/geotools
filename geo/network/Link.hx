@@ -1,4 +1,5 @@
 package geo.network;
+import geo.units.*;
 import haxe.ds.Vector;
 import geo.*;
 import geo.network.NetworkError;
@@ -10,6 +11,7 @@ class Link
 	public var geom(default,null):PathWay;
 	public var network(get,never):Network;
 	var _network:Null<Network>;
+	var _length:Meters;
 
 	/**
 		Creates a new Link from the points `from` and `to`.
@@ -33,9 +35,23 @@ class Link
 		if (g.length >= 4)
 		{
 			// check if not reversed
-
 		}
+		this._length = 0;
 		this.geom = g;
+	}
+
+	public function length():Meters
+	{
+		if (_length != 0)
+		{
+			var len = new Meters(.0);
+			for (i in 0...(geom.length-1))
+			{
+				len += geom[i].dist(geom[i+1]);
+			}
+			return this._length = len;
+		}
+		return this._length;
 	}
 
 	/**

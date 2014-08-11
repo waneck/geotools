@@ -29,7 +29,31 @@ class DefaultMapMatcher
 
 	public function match<Loc:Location>(network:Network, path:Path<Loc>):Array<Link>
 	{
-		var pathinfo = [ for (p in path)
+		// var pathinfo = [ for (p in path)
+	}
+}
+
+private class Candidate
+{
+	public var network:NetworkRelation;
+	public var point:Location;
+	/** que parte da curva de gauss está **/
+	public var N:Float;
+	/** somatória da pontuação **/
+	public var F:Float;
+	public var parent:Candiate;
+	public var links:Array<Link>;
+
+	public function new(location:NetworkRelation, point:Location, deviation : Float)
+	{
+		this.point = point;
+		this.location = location;
+		this.links = [];
+		var d = location.loc.dist(point),
+				N0 = (1 / (deviation * Math.sqrt(2 * Math.PI)));
+		N = N0 * Math.exp( -Math.pow(d,2) / (2 * Math.pow(deviation,2) ));
+		N = N / N0;
+		F = -1;
 	}
 }
 
@@ -64,5 +88,10 @@ private class NetworkRelation
 		if (link.dir == -1)
 			tangentVector = new GeoPoint( -tangentVector.lon, -tangentVector.lat);
 		interpolation = d / link.lenghtInKM();
+	}
+
+	public function distanceNodeFrom():Meters
+	{
+		return interpolation * link.length().float();
 	}
 }
