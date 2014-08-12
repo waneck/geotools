@@ -161,8 +161,8 @@ class TestDate
 		Assert.equals('15', date.formatAs('%M'));
 		// Seconds
 		Assert.equals('30', date.formatAs('%S'));
-		
-		
+		// Day of the year
+		Assert.equals('308', date.formatAs('%j'));
 		
 		var other = TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2013-11-04 11:10:09', 0);
 		// AM

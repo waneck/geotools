@@ -1,5 +1,6 @@
 package geo;
 import geo.Units;
+import haxe.ds.Vector;
 using StringTools;
 
 @:dce @:forward abstract TzDate(DateData)
@@ -384,6 +385,8 @@ using StringTools;
 							
 							
 						case 'j'.code:
+							result.add( (untyped UnixDate.year_months:Vector<Int>)[date.getMonth().toInt()] - (31 - date.getDate()) + 1 );
+							
 						case 'U'.code:
 						case 'W'.code:
 						case 'c'.code:
