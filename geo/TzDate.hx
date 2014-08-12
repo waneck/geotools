@@ -305,7 +305,97 @@ using StringTools;
 		stamp -= stdTimezone.float();
 		return new TzDate(new UnixDate(stamp), stdTimezone);
 	}
-
+	
+	public static function formatAs(date:TzDate, format:String):String {
+		var result = new StringBuf();
+		var index = 0;
+		var character = 0;
+		
+		while (index < format.length) {
+			character = format.charCodeAt( index );
+			
+			switch (character) {
+				case '%'.code:
+					index++;
+					character = format.charCodeAt( index );
+					
+					switch (character) {
+						case 'a'.code: 
+							result.add( date.getDayOfWeek().toString().substring(0, 3) );
+							
+						case 'A'.code:
+							result.add( date.getDayOfWeek().toString() );
+							
+						case 'w'.code:
+							result.add( date.getDayOfWeek().toInt() );
+							
+						case 'd'.code:
+							
+							
+						case 'b'.code:
+							result.add( date.getMonth().toString().substring(0, 3) );
+							
+						case 'B'.code:
+							result.add( date.getMonth().toString() );
+							
+						case 'm'.code:
+							result.add( date.getMonth().toInt() + 1 );
+							
+						case 'y'.code:
+							result.add( '${date.getYear()}'.substring(2, 4) );
+							
+						case 'Y'.code:
+							result.add( '${date.getYear()}' );
+							
+						case 'H'.code:
+							result.add( date.getHours().float() );
+							
+						case 'I'.code:
+							var hours = '' + (date.getHours().float() / 2);
+							switch (hours.length) {
+								case 0: hours = '0';
+								case 1: hours = '0$hours';
+								case _:
+							}
+							result.add( hours );
+							
+						case 'p'.code:
+							result.add( date.getHours().float() <= 12 ? 'AM' : 'PM');
+							
+						case 'M'.code:
+							result.add( date.getMinutes().float() );
+							
+						case 'S'.code:
+							result.add( date.getSeconds().float() );
+							
+						case 'f'.code:
+							result.add( date.getTime().toString() );
+							
+						case 'z'.code:
+							result.add( date.timeZone.float() );
+							
+						case 'Z'.code:
+						case 'j'.code:
+						case 'U'.code:
+						case 'W'.code:
+						case 'c'.code:
+						case 'x'.code:
+						case 'X'.code:
+						case _:
+							result.add( String.fromCharCode( character );
+							
+					}
+					
+				case _:
+					result.add( String.fromCharCode( character ) );
+					
+			}
+			
+		}
+		
+		return result.toString();
+	}
+	
 	@:extern inline public static function fromIso(str:String):TzDate
 	{
 		return fromFormat('%Y-%m-%dT%H:%M:%S%z', str, 0);
