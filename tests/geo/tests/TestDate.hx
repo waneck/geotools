@@ -126,4 +126,54 @@ class TestDate
 		Assert.equals( '2014-06-30T18:59:14Z', TzDate.fromFormat('%ssome other text', '1404154754some other text', 0).toString() );
 		Assert.equals( '2014-06-30T18:59:14Z', TzDate.fromFormat('a%ssome other text', 'a1404154754some other text', new Hours(6)).date.toString() );
 	}
+	
+	public function test_tzDate_formatAs() {
+		// Commented line below needs testing.
+		//var date = new TzDate( new Date(2013, 11, 4, 17, 15, 30) );
+		var date = TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2013-11-04 17:15:30', 0);
+		Assert.equals('2013-11-04', date.formatAs('%Y-%m-%d'));
+		Assert.equals('17:15:30', date.formatAs('%H:%M:%S'));
+		// Abbreviated week name
+		Assert.equals('Mon', date.formatAs('%a'));
+		// Full week name
+		Assert.equals('Monday', date.formatAs('%A'));
+		// Weekday as a number, 0=Sunday, 6=Saturday
+		Assert.equals('1', date.formatAs('%w'));
+		// Day of the month
+		Assert.equals('04', date.formatAs('%d'));
+		// Abbreviated month name
+		Assert.equals('Nov', date.formatAs('%b'));
+		// Full month name
+		Assert.equals('November', date.formatAs('%B'));
+		// Month as a number
+		Assert.equals('11', date.formatAs('%m'));
+		// Year without century
+		Assert.equals('13', date.formatAs('%y'));
+		// Year with century
+		Assert.equals('2013', date.formatAs('%Y'));
+		// 24 Hour clock
+		Assert.equals('17', date.formatAs('%H'));
+		// 12 Hour clock
+		Assert.equals('05', date.formatAs('%I'));
+		// PM
+		Assert.equals('PM', date.formatAs('%p'));
+		// Minutes
+		Assert.equals('15', date.formatAs('%M'));
+		// Seconds
+		Assert.equals('30', date.formatAs('%S'));
+		
+		
+		
+		var other = TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2013-11-04 11:10:09', 0);
+		// AM
+		Assert.equals('AM', other.formatAs('%p'));
+		
+		var pos_timezone = TzDate.fromFormat('%F %T', '2014-06-11 16:45:20', new Hours(3));
+		// UTC offset as +HHMM
+		Assert.equals('+0300', pos_timezone.formatAs('%z'));
+		
+		var neg_timezone = TzDate.fromFormat('%F %T', '2014-06-11 16:45:20', new Hours( -3));
+		// UTC offset as -HHMM
+		Assert.equals('-0300', neg_timezone.formatAs('%z'));
+	}
 }

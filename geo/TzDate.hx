@@ -309,17 +309,17 @@ using StringTools;
 	public static function formatAs(date:TzDate, format:String):String {
 		var result = new StringBuf();
 		var index = 0;
-		var character = 0;
+		var code = 0;
 		
-		while (index < format.length) {
-			character = format.charCodeAt( index );
+		while (index != format.length) {
+			code = format.charCodeAt( index );
 			
-			switch (character) {
+			switch (code) {
 				case '%'.code:
 					index++;
-					character = format.charCodeAt( index );
+					code = format.charCodeAt( index );
 					
-					switch (character) {
+					switch (code) {
 						case 'a'.code: 
 							result.add( date.getDayOfWeek().toString().substring(0, 3) );
 							
@@ -330,7 +330,8 @@ using StringTools;
 							result.add( date.getDayOfWeek().toInt() );
 							
 						case 'd'.code:
-							
+							var date = date.getDate();
+							result.add( date < 10 ? '0$date' : '$date' );
 							
 						case 'b'.code:
 							result.add( date.getMonth().toString().substring(0, 3) );
@@ -339,7 +340,8 @@ using StringTools;
 							result.add( date.getMonth().toString() );
 							
 						case 'm'.code:
-							result.add( date.getMonth().toInt() + 1 );
+							var month = date.getMonth().toInt() + 1;
+							result.add( month < 10 ? '0$month' : '$month' );
 							
 						case 'y'.code:
 							result.add( '${date.getYear()}'.substring(2, 4) );
@@ -351,16 +353,12 @@ using StringTools;
 							result.add( date.getHours().float() );
 							
 						case 'I'.code:
-							var hours = '' + (date.getHours().float() / 2);
-							switch (hours.length) {
-								case 0: hours = '0';
-								case 1: hours = '0$hours';
-								case _:
-							}
-							result.add( hours );
+							var hour = date.getHours().float();
+							hour = hour > 12 ? hour % 12 : hour;
+							result.add( hour < 10 ? '0$hour' : '$hour' );
 							
 						case 'p'.code:
-							result.add( date.getHours().float() <= 12 ? 'AM' : 'PM');
+							result.add( date.getHours().float() < 12 ? 'AM' : 'PM');
 							
 						case 'M'.code:
 							result.add( date.getMinutes().float() );
@@ -372,9 +370,19 @@ using StringTools;
 							result.add( date.getTime().toString() );
 							
 						case 'z'.code:
-							result.add( date.timeZone.float() );
+							var hour = '' + Std.int((date.timeZone.float() / (60 * 60)));
+							var second = '' + Std.int(date.timeZone.float() % 60);
+							var negative = hour.charCodeAt(0) == '-'.code;
+							
+							if (negative) hour = hour.substring(1, hour.length);
+							
+							result.add( negative ? '-' : '+' );
+							result.add( hour.length == 1 ? '0$hour' : hour );
+							result.add( second.length == 1 ? '0$second' : second );
 							
 						case 'Z'.code:
+							
+							
 						case 'j'.code:
 						case 'U'.code:
 						case 'W'.code:
@@ -382,14 +390,16 @@ using StringTools;
 						case 'x'.code:
 						case 'X'.code:
 						case _:
-							result.add( String.fromCharCode( character );
+							result.add( String.fromCharCode( code ) );
 							
 					}
 					
 				case _:
-					result.add( String.fromCharCode( character ) );
+					result.add( String.fromCharCode( code ) );
 					
 			}
+			
+			index++;
 			
 		}
 		
