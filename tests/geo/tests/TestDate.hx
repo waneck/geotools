@@ -167,6 +167,14 @@ class TestDate
 		Assert.equals('45', date.formatAs('%U'));
 		// Week of the year, with 0=Monday, 6=Sunday
 		Assert.equals('45', date.formatAs('%W'));
+		// Date and Time representation
+		Assert.equals('Mon Nov 04 17:15:30 2013', date.formatAs('%c'));
+		// Date representation
+		Assert.equals('11/04/13', date.formatAs('%x'));
+		// Time representation
+		Assert.equals('17:15:30', date.formatAs('%X'));
+		// % Character
+		Assert.equals('%', date.formatAs('%%'));
 		
 		var other = TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2013-11-04 11:10:09', 0);
 		// AM

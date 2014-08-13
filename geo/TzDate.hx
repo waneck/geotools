@@ -394,8 +394,14 @@ using StringTools;
 							result.add(Std.int((((untyped UnixDate.year_months:Vector<Int>)[date.getMonth().toInt()] + date.getDate() - 31 + 1) - (date.getDayOfWeek().toInt() == 0?7:date.getDayOfWeek().toInt()) + 10) / 7));
 							
 						case 'c'.code:
+							result.add( formatAs(date, '%a %b %d %H:%M:%S %Y') );
+							
 						case 'x'.code:
+							result.add( formatAs(date, '%m/%d/%y') );
+							
 						case 'X'.code:
+							result.add( formatAs(date, '%H:%M:%S') );
+							
 						case _:
 							result.add( String.fromCharCode( code ) );
 							
