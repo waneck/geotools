@@ -163,6 +163,10 @@ class TestDate
 		Assert.equals('30', date.formatAs('%S'));
 		// Day of the year
 		Assert.equals('308', date.formatAs('%j'));
+		// Week of the year, with 0=Sunday, 6=Saturday
+		Assert.equals('45', date.formatAs('%U'));
+		// Week of the year, with 0=Monday, 6=Sunday
+		Assert.equals('45', date.formatAs('%W'));
 		
 		var other = TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2013-11-04 11:10:09', 0);
 		// AM

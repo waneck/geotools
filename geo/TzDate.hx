@@ -388,7 +388,11 @@ using StringTools;
 							result.add( (untyped UnixDate.year_months:Vector<Int>)[date.getMonth().toInt()] - (31 - date.getDate()) + 1 );
 							
 						case 'U'.code:
+							result.add(Std.int((((untyped UnixDate.year_months:Vector<Int>)[date.getMonth().toInt()] + date.getDate() - 31 + 1) - (date.getDayOfWeek().toInt() == 0?7:date.getDayOfWeek().toInt()) + 10) / 7));
+							
 						case 'W'.code:
+							result.add(Std.int((((untyped UnixDate.year_months:Vector<Int>)[date.getMonth().toInt()] + date.getDate() - 31 + 1) - (date.getDayOfWeek().toInt() == 0?7:date.getDayOfWeek().toInt()) + 10) / 7));
+							
 						case 'c'.code:
 						case 'x'.code:
 						case 'X'.code:
