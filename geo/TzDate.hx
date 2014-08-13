@@ -372,14 +372,14 @@ using StringTools;
 							
 						case 'z'.code:
 							var hour = '' + Std.int((date.timeZone.float() / (60 * 60)));
-							var second = '' + Std.int(date.timeZone.float() % 60);
+							var minute = '' + Std.int(date.timeZone.float() % 60);
 							var negative = hour.charCodeAt(0) == '-'.code;
 							
 							if (negative) hour = hour.substring(1, hour.length);
 							
 							result.add( negative ? '-' : '+' );
 							result.add( hour.length == 1 ? '0$hour' : hour );
-							result.add( second.length == 1 ? '0$second' : second );
+							result.add( minute.length == 1 ? '0$minute' : minute );
 							
 						case 'Z'.code:
 							
