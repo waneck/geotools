@@ -138,8 +138,8 @@ class Link
 	**/
 	public function reverse():Link
 	{
-		var from = to,
-				to = from;
+		var from = this.to,
+				to = this.from;
 		if (this.geom.length > 2)
 		{
 			var geom = geom;
