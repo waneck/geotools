@@ -79,6 +79,9 @@ class TestNetwork
 		Assert.isTrue(links.indexOf(link1) >= 0);
 		Assert.isTrue(links.indexOf(link2) >= 0);
 		Assert.isTrue(links.indexOf(link3) >= 0);
+
+		var l1rev = link1.reverse();
+		net.addLink(l1rev,false);
 	}
 
 	static function raises(method:Void -> Void, ?type:Dynamic, ?msgNotThrown : String , ?msgWrongType : String, ?pos : haxe.PosInfos)

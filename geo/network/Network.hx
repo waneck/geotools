@@ -187,13 +187,14 @@ import geo.network.NetworkError;
 			nto = nodes[link.to] = [];
 		}
 
-		var cont = true;
+		var cont = true,
+				fromLoc = link.from;
 		for (f in nfrom)
 		{
 			if (!cont) break;
 			for (t in nto)
 			{
-				if (f == t)
+				if (f == t && f.from.eq(fromLoc) && f.to.eq(link.to))
 				{
 					if (replace)
 					{
