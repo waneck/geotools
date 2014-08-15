@@ -126,66 +126,66 @@ class TestDate
 		Assert.equals( '2014-06-30T18:59:14Z', TzDate.fromFormat('%ssome other text', '1404154754some other text', 0).toString() );
 		Assert.equals( '2014-06-30T18:59:14Z', TzDate.fromFormat('a%ssome other text', 'a1404154754some other text', new Hours(6)).date.toString() );
 	}
-	
+
 	public function test_tzDate_formatAs() {
 		// Commented line below needs testing.
 		//var date = new TzDate( new Date(2013, 11, 4, 17, 15, 30) );
 		var date = TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2013-11-04 17:15:30', 0);
-		Assert.equals('2013-11-04', date.formatAs('%Y-%m-%d'));
-		Assert.equals('17:15:30', date.formatAs('%H:%M:%S'));
+		Assert.equals('2013-11-04', date.format('%Y-%m-%d'));
+		Assert.equals('17:15:30', date.format('%H:%M:%S'));
 		// Abbreviated week name
-		Assert.equals('Mon', date.formatAs('%a'));
+		Assert.equals('Mon', date.format('%a'));
 		// Full week name
-		Assert.equals('Monday', date.formatAs('%A'));
+		Assert.equals('Monday', date.format('%A'));
 		// Weekday as a number, 0=Sunday, 6=Saturday
-		Assert.equals('1', date.formatAs('%w'));
+		Assert.equals('1', date.format('%w'));
 		// Day of the month
-		Assert.equals('04', date.formatAs('%d'));
+		Assert.equals('04', date.format('%d'));
 		// Abbreviated month name
-		Assert.equals('Nov', date.formatAs('%b'));
+		Assert.equals('Nov', date.format('%b'));
 		// Full month name
-		Assert.equals('November', date.formatAs('%B'));
+		Assert.equals('November', date.format('%B'));
 		// Month as a number
-		Assert.equals('11', date.formatAs('%m'));
+		Assert.equals('11', date.format('%m'));
 		// Year without century
-		Assert.equals('13', date.formatAs('%y'));
+		Assert.equals('13', date.format('%y'));
 		// Year with century
-		Assert.equals('2013', date.formatAs('%Y'));
+		Assert.equals('2013', date.format('%Y'));
 		// 24 Hour clock
-		Assert.equals('17', date.formatAs('%H'));
+		Assert.equals('17', date.format('%H'));
 		// 12 Hour clock
-		Assert.equals('05', date.formatAs('%I'));
+		Assert.equals('05', date.format('%I'));
 		// PM
-		Assert.equals('PM', date.formatAs('%p'));
+		Assert.equals('PM', date.format('%p'));
 		// Minutes
-		Assert.equals('15', date.formatAs('%M'));
+		Assert.equals('15', date.format('%M'));
 		// Seconds
-		Assert.equals('30', date.formatAs('%S'));
+		Assert.equals('30', date.format('%S'));
 		// Day of the year
-		Assert.equals('308', date.formatAs('%j'));
+		Assert.equals('308', date.format('%j'));
 		// Week of the year, with 0=Sunday, 6=Saturday
-		Assert.equals('45', date.formatAs('%U'));
+		Assert.equals('45', date.format('%U'));
 		// Week of the year, with 0=Monday, 6=Sunday
-		Assert.equals('45', date.formatAs('%W'));
+		Assert.equals('45', date.format('%W'));
 		// Date and Time representation
-		Assert.equals('Mon Nov 04 17:15:30 2013', date.formatAs('%c'));
+		Assert.equals('Mon Nov 04 17:15:30 2013', date.format('%c'));
 		// Date representation
-		Assert.equals('11/04/13', date.formatAs('%x'));
+		Assert.equals('11/04/13', date.format('%x'));
 		// Time representation
-		Assert.equals('17:15:30', date.formatAs('%X'));
+		Assert.equals('17:15:30', date.format('%X'));
 		// % Character
-		Assert.equals('%', date.formatAs('%%'));
-		
+		Assert.equals('%', date.format('%%'));
+
 		var other = TzDate.fromFormat('%Y-%m-%d %H:%M:%S', '2013-11-04 11:10:09', 0);
 		// AM
-		Assert.equals('AM', other.formatAs('%p'));
-		
+		Assert.equals('AM', other.format('%p'));
+
 		var pos_timezone = TzDate.fromFormat('%F %T', '2014-06-11 16:45:20', new Hours(3));
 		// UTC offset as +HHMM
-		Assert.equals('+0300', pos_timezone.formatAs('%z'));
-		
+		Assert.equals('+0300', pos_timezone.format('%z'));
+
 		var neg_timezone = TzDate.fromFormat('%F %T', '2014-06-11 16:45:20', new Hours( -3));
 		// UTC offset as -HHMM
-		Assert.equals('-0300', neg_timezone.formatAs('%z'));
+		Assert.equals('-0300', neg_timezone.format('%z'));
 	}
 }
