@@ -1,5 +1,6 @@
 package geo;
 import geo.Units;
+import haxe.ds.Vector;
 using StringTools;
 
 @:dce @:forward abstract TzDate(DateData)
@@ -305,7 +306,119 @@ using StringTools;
 		stamp -= stdTimezone.float();
 		return new TzDate(new UnixDate(stamp), stdTimezone);
 	}
-
+	
+	public static function formatAs(date:TzDate, format:String):String {
+		var result = new StringBuf();
+		var index = 0;
+		var code = 0;
+		
+		while (index != format.length) {
+			code = format.charCodeAt( index );
+			
+			switch (code) {
+				case '%'.code:
+					index++;
+					code = format.charCodeAt( index );
+					
+					switch (code) {
+						case 'a'.code: 
+							result.add( date.getDayOfWeek().toString().substring(0, 3) );
+							
+						case 'A'.code:
+							result.add( date.getDayOfWeek().toString() );
+							
+						case 'w'.code:
+							result.add( date.getDayOfWeek().toInt() );
+							
+						case 'd'.code:
+							var date = date.getDate();
+							result.add( date < 10 ? '0$date' : '$date' );
+							
+						case 'b'.code:
+							result.add( date.getMonth().toString().substring(0, 3) );
+							
+						case 'B'.code:
+							result.add( date.getMonth().toString() );
+							
+						case 'm'.code:
+							var month = date.getMonth().toInt() + 1;
+							result.add( month < 10 ? '0$month' : '$month' );
+							
+						case 'y'.code:
+							result.add( '${date.getYear()}'.substring(2, 4) );
+							
+						case 'Y'.code:
+							result.add( '${date.getYear()}' );
+							
+						case 'H'.code:
+							result.add( date.getHours().float() );
+							
+						case 'I'.code:
+							var hour = date.getHours().float();
+							hour = hour > 12 ? hour % 12 : hour;
+							result.add( hour < 10 ? '0$hour' : '$hour' );
+							
+						case 'p'.code:
+							result.add( date.getHours().float() < 12 ? 'AM' : 'PM');
+							
+						case 'M'.code:
+							result.add( date.getMinutes().float() );
+							
+						case 'S'.code:
+							result.add( date.getSeconds().float() );
+							
+						case 'f'.code:
+							result.add( date.getTime().toString() );
+							
+						case 'z'.code:
+							var hour = '' + Std.int((date.timeZone.float() / (60 * 60)));
+							var minute = '' + Std.int(date.timeZone.float() % 60);
+							var negative = hour.charCodeAt(0) == '-'.code;
+							
+							if (negative) hour = hour.substring(1, hour.length);
+							
+							result.add( negative ? '-' : '+' );
+							result.add( hour.length == 1 ? '0$hour' : hour );
+							result.add( minute.length == 1 ? '0$minute' : minute );
+							
+						case 'Z'.code:
+							
+							
+						case 'j'.code:
+							result.add( (untyped UnixDate.year_months:Vector<Int>)[date.getMonth().toInt()] - (31 - date.getDate()) + 1 );
+							
+						case 'U'.code:
+							result.add(Std.int((((untyped UnixDate.year_months:Vector<Int>)[date.getMonth().toInt()] + date.getDate() - 31 + 1) - (date.getDayOfWeek().toInt() == 0?7:date.getDayOfWeek().toInt()) + 10) / 7));
+							
+						case 'W'.code:
+							result.add(Std.int((((untyped UnixDate.year_months:Vector<Int>)[date.getMonth().toInt()] + date.getDate() - 31 + 1) - (date.getDayOfWeek().toInt() == 0?7:date.getDayOfWeek().toInt()) + 10) / 7));
+							
+						case 'c'.code:
+							result.add( formatAs(date, '%a %b %d %H:%M:%S %Y') );
+							
+						case 'x'.code:
+							result.add( formatAs(date, '%m/%d/%y') );
+							
+						case 'X'.code:
+							result.add( formatAs(date, '%H:%M:%S') );
+							
+						case _:
+							result.add( String.fromCharCode( code ) );
+							
+					}
+					
+				case _:
+					result.add( String.fromCharCode( code ) );
+					
+			}
+			
+			index++;
+			
+		}
+		
+		return result.toString();
+	}
+	
 	@:extern inline public static function fromIso(str:String):TzDate
 	{
 		return fromFormat('%Y-%m-%dT%H:%M:%S%z', str, 0);
