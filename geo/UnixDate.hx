@@ -426,7 +426,10 @@ import geo.Units;
 							result.add( '${date.getYear()}' );
 
 						case 'H'.code:
-							result.add( date.getHours().float() );
+							var h = Std.int(date.getHours().float()) + "";
+							if (h.length == 1)
+								h = "0" + h;
+							result.add(h);
 
 						case 'I'.code:
 							var hour = date.getHours().float();
@@ -437,10 +440,16 @@ import geo.Units;
 							result.add( date.getHours().float() < 12 ? 'AM' : 'PM');
 
 						case 'M'.code:
-							result.add( date.getMinutes().float() );
+							var m = Std.int(date.getMinutes().float()) + "";
+							if (m.length == 1)
+								m = "0" + m;
+							result.add(m);
 
 						case 'S'.code:
-							result.add( date.getSeconds().float() );
+							var s = Std.int(date.getSeconds().float()) + "";
+							if (s.length == 1)
+								s = "0" + s;
+							result.add(s);
 
 						case 'f'.code:
 							result.add( date.getTime().toString() );

@@ -187,5 +187,9 @@ class TestDate
 		var neg_timezone = TzDate.fromFormat('%F %T', '2014-06-11 16:45:20', new Hours( -3));
 		// UTC offset as -HHMM
 		Assert.equals('-0300', neg_timezone.format('%z'));
+
+		// test 0 pad:
+		var date = TzDate.fromIso('2014-01-02T03:04:05Z').date;
+		Assert.equals(date.format('%Y-%m-%d %H:%M:%S', 0), '2014-01-02 03:04:05');
 	}
 }
