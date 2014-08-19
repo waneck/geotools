@@ -387,6 +387,11 @@ import geo.Units;
 		var index = 0;
 		var code = 0;
 
+		if (timeZone != 0)
+		{
+			date = new UnixDate(date.getTime() + timeZone);
+		}
+
 		while (index != format.length) {
 			code = format.charCodeAt( index );
 

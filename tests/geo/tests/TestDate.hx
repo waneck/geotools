@@ -189,7 +189,7 @@ class TestDate
 		Assert.equals('-0300', neg_timezone.format('%z'));
 
 		// test 0 pad:
-		var date = TzDate.fromIso('2014-01-02T03:04:05Z').date;
-		Assert.equals(date.format('%Y-%m-%d %H:%M:%S', 0), '2014-01-02 03:04:05');
+		var date = TzDate.fromIso('2014-01-02T03:04:05-0100').date;
+		Assert.equals(date.format('%Y-%m-%d %H:%M:%S', new Hours(-1)), '2014-01-02 03:04:05');
 	}
 }
