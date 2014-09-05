@@ -127,8 +127,10 @@ import geo.units.*;
 		{
 			mid = Std.int(min + (max - min) / 2);
 			var imid = locs[mid];
-			if (date < imid.time)
+			if (expand && imid == null)
 			{
+				max = mid;
+			} else if (date < imid.time) {
 				max = mid;
 			} else if (date > imid.time) {
 				min = mid + 1;
