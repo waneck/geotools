@@ -17,7 +17,7 @@ using StringTools;
 
 	@:extern inline public static function timezone():Seconds
 	{
-		return - (new Date(1970,00,01 , 00,00,00).getTime() / 1000);
+		return - (new Date(1970,0,1 , 0,0,0).getTime() / 1000);
 	}
 
 	@:extern inline public function toString()
