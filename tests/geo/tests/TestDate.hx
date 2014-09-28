@@ -98,7 +98,7 @@ class TestDate
 		Assert.equals('2014-06-30T15:59:14-0300', date.toString());
 		Assert.equals('2014-06-30T18:59:14Z', date.date.toString());
 		Assert.equals('2014-07-01T00:59:14+0600', otherDay.toString());
-		Assert.equals(01, otherDay.getDate());
+		Assert.equals(1, otherDay.getDate());
 		Assert.equals(30, date.getDate());
 	}
 

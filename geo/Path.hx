@@ -45,8 +45,10 @@ import haxe.ds.Vector;
 		return new Path(data,0,len);
 	}
 
-	inline public function constrain(start:Int, length=-1):Path<Pos>
+	public function constrain(start:Int, length=-1):Path<Pos>
 	{
+		if (length >= 0 && (this.length - (start + this.start)) < length)
+			throw 'Constraint out of bounds: $length is bigger than ${this.length - (start + this.start)}';
 		return new Path(data, start + this.start, length < 0 ? this.length - (start + this.start) : length);
 	}
 
