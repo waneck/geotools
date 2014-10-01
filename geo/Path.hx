@@ -25,13 +25,17 @@ import haxe.ds.Vector;
 		Vector.blit(data,start,destination,destPos,length);
 	}
 
-	public function lengthMeters():Meters
+	public function lengthMeters(stride:Int=1):Meters
 	{
+		var length = Std.int(this.length / stride) - 1,
+				start = this.start;
 		var data = data,
 				len = new Meters(0);
-		for (i in start...(start+length - 1))
+		// for (i in start...(start+length - 1))
+		for (_ in 0...length)
 		{
-			len += data[i].dist(data[i+1]);
+			len += data[start].dist(data[start+stride]);
+			start += stride;
 		}
 		return len;
 	}
@@ -47,9 +51,9 @@ import haxe.ds.Vector;
 
 	public function constrain(start:Int, length=-1):Path<Pos>
 	{
-		if (length >= 0 && (this.length - (start + this.start)) < length)
-			throw 'Constraint out of bounds: $length is bigger than ${this.length - (start + this.start)}';
-		return new Path(data, start + this.start, length < 0 ? this.length - (start + this.start) : length);
+		if (length >= 0 && (this.length - start) < length)
+			throw 'Constraint out of bounds: $length is bigger than ${this.length - start}';
+		return new Path(data, start + this.start, length < 0 ? this.length - start : length);
 	}
 
 	inline public static function fromArray<Pos:Location>(arr:Array<Pos>, start:Int = 0, length = -1):Path<Pos>
@@ -172,13 +176,14 @@ import haxe.ds.Vector;
 	/**
 		Returns the index of the point that defines with returned index + 1 the line segment
 		that is closest to `point`
+		If `stride` is higher than 1, only one in each `stride` points are considered in the current path on the first pass
 	**/
-	public function closestIndexToPoint(point:Location):Int
+	public function closestIndexToPoint(point:Location, stride=1):Int
 	{
 		var lat = point.lat,
 				lon = point.lon;
 
-		var length = this.length;
+		var length = Std.int(this.length / stride);
 		if (length < 2)
 			throw "Not enough points to find closest index: " + length;
 
@@ -186,18 +191,47 @@ import haxe.ds.Vector;
 				idx = -1,
 				start = this.start,
 				data = this.data;
-		for (i in 0...(length-1))
+		var i = 0;
+		for (_ in 0...(length-stride))
 		{
 			var p0 = data[start+i],
-					p1 = data[start+i+1];
+					p1 = data[start+i+stride];
 			var u = point.segInterpolationInline(p0,p1);
-			var ulat = p0.lat + u * (p1.lat - p0.lat),
-					ulon = p0.lon + u * (p1.lon - p0.lon);
-			var d = (ulat - lat) * (ulat - lat) + (ulon - lon) * (ulon - lon);
+			var d = switch (u) {
+				case 0:
+					(p0.lat - lat) * (p0.lat - lat) + (p0.lon - lon) * (p0.lon - lon);
+				case 1:
+					(p1.lat - lat) * (p1.lat - lat) + (p1.lon - lon) * (p1.lon - lon);
+				case _:
+					var ulat = p0.lat + u * (p1.lat - p0.lat),
+							ulon = p0.lon + u * (p1.lon - p0.lon);
+					(ulat - lat) * (ulat - lat) + (ulon - lon) * (ulon - lon);
+			}
 			if (d < dmin)
 			{
 				dmin = d;
 				idx = i;
+			}
+			i += stride;
+		}
+
+		if (stride > 1)
+		{
+			dmin = Math.POSITIVE_INFINITY;
+			idx = -1;
+			for (i in i...(i+stride))
+			{
+				var p0 = data[start+i],
+						p1 = data[start+i+1];
+				var u = point.segInterpolationInline(p0,p1);
+				var ulat = p0.lat + u * (p1.lat - p0.lat),
+						ulon = p0.lon + u * (p1.lon - p0.lon);
+				var d = (ulat - lat) * (ulat - lat) + (ulon - lon) * (ulon - lon);
+				if (d < dmin)
+				{
+					dmin = d;
+					idx = i;
+				}
 			}
 		}
 
