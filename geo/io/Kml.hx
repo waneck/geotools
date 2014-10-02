@@ -131,11 +131,6 @@ abstract Kml(KmlState)
 	public function point<T:Location>(label:String, ?description:KmlDescription, point:T):Kml
 	{
 		var buf = new StringBuf();
-		if (this.enableTimestamps && Std.is(point, LocationTime))
-		{
-			var lt:LocationTime = cast point;
-			buf.add('<TimeStamp><when>${lt.time}</when></TimeStamp>');
-		}
 		buf.add('<Point><coordinates>${point.lon},${point.lat},0</coordinates></Point>');
 		if (label != null)
 		{
