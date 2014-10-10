@@ -194,8 +194,8 @@ import haxe.ds.Vector;
 		var i = 0;
 		for (_ in 0...(length-stride))
 		{
-			var p0 = data[start+i],
-					p1 = data[start+i+stride];
+			var p0:Location = data[start+i],
+					p1:Location = data[start+i+stride];
 			var u = point.segInterpolationInline(p0,p1);
 			var d = switch (u) {
 				case 0:
@@ -221,8 +221,8 @@ import haxe.ds.Vector;
 			idx = -1;
 			for (i in i...(i+stride))
 			{
-				var p0 = data[start+i],
-						p1 = data[start+i+1];
+				var p0:Location = data[start+i],
+						p1:Location = data[start+i+1];
 				var u = point.segInterpolationInline(p0,p1);
 				var ulat = p0.lat + u * (p1.lat - p0.lat),
 						ulon = p0.lon + u * (p1.lon - p0.lon);
@@ -255,8 +255,8 @@ import haxe.ds.Vector;
 				ilon = .0;
 		for (i in 0...(length-1))
 		{
-			var p0 = data[start+i],
-					p1 = data[start+i+1];
+			var p0:Location = data[start+i],
+					p1:Location = data[start+i+1];
 			var u = point.segInterpolationInline(p0,p1);
 			var ulat = p0.lat + u * (p1.lat - p0.lat),
 					ulon = p0.lon + u * (p1.lon - p0.lon);
