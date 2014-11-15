@@ -66,6 +66,7 @@ class ThreadPool
 		while (total > 0)
 		{
 			var len = total < each ? total : each;
+			if (len == 0) len = 1;
 			var arr = [ for (i in (arrlen - total)...(arrlen - total + len)) array[i] ];
 			deque.add(function() fn(arr));
 			total -= len;
@@ -84,6 +85,7 @@ class ThreadPool
 		while (total > 0)
 		{
 			var len = total < each ? total : each;
+			if (len == 0) len = 1;
 			var arr = [ for (i in (arrlen - total)...(arrlen - total + len)) array[i] ];
 			deque.add(function() {
 				var a2 = [ for (a in arr) fn(a) ];
