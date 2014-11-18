@@ -29,6 +29,16 @@ class TestDate
 		Assert.equals('1972-07-28T00:00:00Z', new UnixDate(81129600).toString());
 	}
 
+	public function test_days()
+	{
+		Assert.equals((TzDate.fromIso("2016-12-31T00:00:00Z").date + new Hours(24)).toString(), "2017-01-01T00:00:00Z");
+		// for (i in 0...1295)
+		// {
+		// 	var date = TzDate.fromFormat("%Y-%m-%d", "2015-01-01", new Seconds(0)).date + new Hours(24 * i);
+		// 	trace(date);
+		// }
+	}
+
 	public function test_month()
 	{
 		var stamp = new UnixDate(1403208368);

@@ -206,7 +206,7 @@ import geo.Units;
 				year += y * 4 + 2;
 
 				// rem is the remaining days we have. the month will depend if we're on a leap year
-				if (rem > 366)
+				if (rem >= 366)
 				{
 					// past leap year
 					rem -= 366;
