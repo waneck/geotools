@@ -27,17 +27,17 @@ using StringTools;
 
 	@:extern inline public function getDate():Int
 	{
-		return UnixDate.getDate( this.date.getTime().float() + this.timeZone.float() );
+		return ( cast this.date.getTime().float() + this.timeZone.float() : UnixDate).getDate();
 	}
 
 	@:extern inline public function getMonth():Month
 	{
-		return UnixDate.getMonth( this.date.getTime().float() + this.timeZone.float() );
+		return ( cast this.date.getTime().float() + this.timeZone.float() : UnixDate).getMonth();
 	}
 
 	@:extern inline public function getYear():Int
 	{
-		return UnixDate.getYear( this.date.getTime().float() + this.timeZone.float() );
+		return ( cast this.date.getTime().float() + this.timeZone.float() : UnixDate).getYear();
 	}
 
 	public static function now():TzDate
@@ -372,7 +372,7 @@ using StringTools;
 		var ret = new StringBuf();
 		var tz = this.timeZone.float() / 60;
 		if (tz < 0) tz = -tz;
-		UnixDate.withParts(this.date.getTime() + this.timeZone, function(year,month,day,hour,minute,sec) {
+		(cast this.date.getTime() + this.timeZone : UnixDate).withParts(function(year,month,day,hour,minute,sec) {
 			ret.add(year);
 			ret.add('-');
 			ret.add(str(month.toInt()+1));
@@ -408,21 +408,21 @@ using StringTools;
 
 	inline public function getSeconds():Seconds
 	{
-		return UnixDate.getSeconds( this.date.getTime().float() + this.timeZone.float() );
+		return ( cast this.date.getTime().float() + this.timeZone.float() : UnixDate).getSeconds();
 	}
 
 	inline public function getMinutes():Minutes
 	{
-		return UnixDate.getMinutes( this.date.getTime().float() + this.timeZone.float() );
+		return ( cast this.date.getTime().float() + this.timeZone.float() : UnixDate).getMinutes();
 	}
 
 	inline public function getHours():Hours
 	{
-		return UnixDate.getHours( this.date.getTime().float() + this.timeZone.float() );
+		return ( cast this.date.getTime().float() + this.timeZone.float() : UnixDate).getHours();
 	}
 
 	@:extern inline public function getDayOfWeek():DayOfWeek
 	{
-		return UnixDate.getDayOfWeek( this.date.getTime().float() + this.timeZone.float() );
+		return ( cast this.date.getTime().float() + this.timeZone.float() : UnixDate).getDayOfWeek();
 	}
 }
